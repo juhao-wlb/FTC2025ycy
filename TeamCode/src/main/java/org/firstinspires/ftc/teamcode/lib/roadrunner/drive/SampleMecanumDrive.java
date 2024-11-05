@@ -75,7 +75,7 @@ public class SampleMecanumDrive extends MecanumDrive {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private GoBildaPinPointLocalizer od;
+    private GoBildaLocalizer od;
     private VoltageSensor batteryVoltageSensor;
 
     private List<Integer> lastEncPositions = new ArrayList<>();
@@ -98,7 +98,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        od = new GoBildaPinPointLocalizer(hardwareMap);
+        od = new GoBildaLocalizer(hardwareMap);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
@@ -254,9 +254,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         setDrivePower(vel);
     }
 
-    public void resetHeading() {
-        yawHeading = od.getHeading();
-    }
+    public void resetHeading() { yawHeading = od.getHeading(); }
 
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;

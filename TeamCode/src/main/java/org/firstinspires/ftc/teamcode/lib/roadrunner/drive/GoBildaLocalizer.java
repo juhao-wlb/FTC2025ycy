@@ -16,10 +16,10 @@ public class GoBildaLocalizer implements Localizer {
     private final GoBildaPinpointDriver odometry;
 
     public GoBildaLocalizer(final HardwareMap hardwareMap) {
-        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odometry.setOffsets(0,0);
+        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odometry.setOffsets(-100,40);
         odometry.resetPosAndIMU();
     }
 
@@ -28,6 +28,11 @@ public class GoBildaLocalizer implements Localizer {
     public Pose2d getPoseEstimate() {
         odometry.update();
         return toPose2d(odometry.getPosition());
+    }
+
+    public double getHeading() {
+        odometry.update();
+        return odometry.getHeading();
     }
 
     @Override
@@ -40,6 +45,11 @@ public class GoBildaLocalizer implements Localizer {
     public Pose2d getPoseVelocity() {
         odometry.update();
         return toPose2d(odometry.getVelocity());
+    }
+
+    public double getHeadingVelocity() {
+        odometry.update();
+        return odometry.getHeadingVelocity();
     }
 
     @Override
