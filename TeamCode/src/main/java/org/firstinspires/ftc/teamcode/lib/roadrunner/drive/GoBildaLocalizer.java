@@ -10,16 +10,20 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.lib.GeomUtil;
 import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
 
+import lombok.experimental.ExtensionMethod;
+
+@ExtensionMethod({GeomUtil.class})
 public class GoBildaLocalizer implements Localizer {
     private final GoBildaPinpointDriver odometry;
 
     public GoBildaLocalizer(final HardwareMap hardwareMap) {
-        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
+        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odometry.setOffsets(0,0);
+        odometry.setOffsets(-110,40);
         odometry.resetPosAndIMU();
     }
 
@@ -27,32 +31,23 @@ public class GoBildaLocalizer implements Localizer {
     @Override
     public Pose2d getPoseEstimate() {
         odometry.update();
-        return toPose2d(odometry.getPosition());
+        return odometry.getPosition().toPose2d();
     }
 
     @Override
     public void setPoseEstimate(@NonNull Pose2d pose2d) {
-        odometry.setPosition(toPose2D(pose2d));
+        odometry.setPosition(pose2d.toPose2D());
     }
 
     @Nullable
     @Override
     public Pose2d getPoseVelocity() {
         odometry.update();
-        return toPose2d(odometry.getVelocity());
+        return odometry.getVelocity().toPose2d();
     }
 
     @Override
     public void update() {}
 
-    public static Pose2d toPose2d(Pose2D pose) {
-        return new Pose2d(pose.getX(DistanceUnit.INCH),
-                pose.getY(DistanceUnit.INCH),
-                pose.getHeading(AngleUnit.RADIANS));
-    }
 
-    public static Pose2D toPose2D(Pose2d pose) {
-        return new Pose2D(DistanceUnit.INCH, pose.getX(), pose.getY(),
-                AngleUnit.RADIANS, pose.getHeading());
-    }
 }
