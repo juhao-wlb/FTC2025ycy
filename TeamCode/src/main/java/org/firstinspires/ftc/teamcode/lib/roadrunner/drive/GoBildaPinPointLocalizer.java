@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Config
+@Deprecated
 public class GoBildaPinPointLocalizer extends TwoTrackingWheelLocalizer {
     private final GoBildaPinpointDriver odometry;
 
