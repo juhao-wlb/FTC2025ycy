@@ -20,11 +20,11 @@ public class MotorTest extends LinearOpMode {
     private final Telemetry telemetry_M = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     public static int encoder_position = 1150;
     public static double max_power = 0.7;
-    public static boolean read_only = true;
+    public static boolean read_only = false;
     public static boolean reverse_0 = false;
     public static boolean reset = true;
     public static boolean set_power_mode_or_set_position_mode = false;
-    public static String motor_name_0 = "backSlide";
+    public static String motor_name_0 = "leftBackMotor";
 
 
 
