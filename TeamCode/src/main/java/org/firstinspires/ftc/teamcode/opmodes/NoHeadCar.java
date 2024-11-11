@@ -6,25 +6,24 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+
 import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
 
-@TeleOp(name = "fieldRelativeTeleOP")
-public class NoHeadCar extends LinearOpMode {
-    private Servo leftIntakeServo, rightIntakeServo, clawServo, slideServo, turnServo;
-    private DcMotor leftLiftMotor, rightLiftMotor, leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor;
-    private TurnServoState turnState = TurnServoState.ORIGIN;
+@TeleOp(name = "ycyAlphaTeleOP")
+public class AlphaCar extends LinearOpMode {
+    private Servo clawServo, clawTurnServo;
+    private DcMotor leftFrontMotor, leftBackMotor, rightFrontMotor, rightBackMotor, slideMotor, leftLiftMotor, rightLiftMotor;
+    private clawTurnServoState turnState = clawTurnServoState.ORIGIN;
     private GoBildaPinpointDriver od;
     private double yawOffset;
 
     @Override
     public void runOpMode() throws InterruptedException {
         clawServo = hardwareMap.get(Servo.class,"clawServo");
-        turnServo = hardwareMap.get(Servo.class,"turnServo");
-        slideServo = hardwareMap.get(Servo.class,"slideServo");
+        clawTurnServo = hardwareMap.get(Servo.class,"clawTurnServo");
+        slideMotor = hardwareMap.get(DcMotor.class,"slideMotor");
         leftLiftMotor = hardwareMap.get(DcMotor.class,"leftLiftMotor");
-        rightLiftMotor = hardwareMap.get(DcMotor.class,"rightLftMotor");
-        //leftIntakeServo = hardwareMap.get(Servo.class,"leftIntakeServo");
-        //rightIntakeServo = hardwareMap.get(Servo.class,"rightIntakeServo");
+        rightLiftMotor = hardwareMap.get(DcMotor.class,"rightLiftMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class,"leftFrontMotor");
         leftBackMotor = hardwareMap.get(DcMotor.class,"leftBackMotor");
         rightFrontMotor = hardwareMap.get(DcMotor.class,"rightFrontMotor");
@@ -38,7 +37,11 @@ public class NoHeadCar extends LinearOpMode {
         od = hardwareMap.get(GoBildaPinpointDriver.class,"od");
         od.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         od.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        od.setOffsets(0, 0);
+        od.setOffsets(155, -25);
+
+        ToggleBoolean isRightDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_right);
+        ToggleBoolean isLeftDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_left);
+
         waitForStart();
         while(opModeIsActive()){
             od.update();
@@ -78,78 +81,53 @@ public class NoHeadCar extends LinearOpMode {
                 leftLiftMotor.setPower(0);
                 rightLiftMotor.setPower(0);
             }
-            /* if(gamepad1.left_bumper) {
-                leftIntakeServo.setPosition(0);
-                rightIntakeServo.setPosition(1);
-            }
-            else if(gamepad1.right_bumper) {
-                leftIntakeServo.setPosition(1);
-                rightIntakeServo.setPosition(0);
-            }
-            else {
-                leftIntakeServo.setPosition(0.5);
-                rightIntakeServo.setPosition(0.5);
-            }*/
+            if(gamepad1.left_bumper) slideMotor.setPower(1);
+            else if(gamepad1.right_bumper) slideMotor.setPower(-1);
+            else slideMotor.setPower(0);
+
             if(gamepad1.a) {
                 yawOffset = od.getHeading() % 360;
             }
-            else if(gamepad1.dpad_right) {
+            else if(isRightDPadPressed.isPressed()) {
                 switch(turnState) {
                     case ORIGIN:
-                        turnState = TurnServoState.RIGHT30;
-                        break;
-                    case RIGHT30:
-                        turnState = TurnServoState.RIGHT60;
-                        break;
-                    case RIGHT60:
-                        turnState = TurnServoState.RIGHT90;
+                        turnState = clawTurnServoState.RIGHT30;
                         break;
                     case RIGHT90:
-                        turnState = TurnServoState.RIGHT90;
+                        turnState = clawTurnServoState.RIGHT90;
                         break;
-                    case LEFT90:
-                        turnState = TurnServoState.LEFT60;
+                    case RIGHT60:
+                        turnState = clawTurnServoState.RIGHT90;
                         break;
-                    case LEFT60:
-                        turnState = TurnServoState.LEFT90;
+                    case RIGHT30:
+                        turnState = clawTurnServoState.RIGHT60;
                         break;
-                    case LEFT30:
-                        turnState = TurnServoState.LEFT90;
-                        break;
+
                 }
             }
-            else if(gamepad1.dpad_left) {
+            else if(isLeftDPadPressed.isPressed()) {
                 switch(turnState) {
                     case ORIGIN:
-                        turnState = TurnServoState.LEFT30;
-                        break;
-                    case RIGHT30:
-                        turnState = TurnServoState.ORIGIN;
-                        break;
-                    case RIGHT60:
-                        turnState = TurnServoState.RIGHT30;
+                        turnState = clawTurnServoState.ORIGIN;
                         break;
                     case RIGHT90:
-                        turnState = TurnServoState.RIGHT60;
+                        turnState = clawTurnServoState.RIGHT60;
                         break;
-                    case LEFT90:
-                        turnState = TurnServoState.LEFT90;
+                    case RIGHT60:
+                        turnState = clawTurnServoState.RIGHT30;
                         break;
-                    case LEFT60:
-                        turnState = TurnServoState.LEFT90;
-                        break;
-                    case LEFT30:
-                        turnState = TurnServoState.LEFT60;
+                    case RIGHT30:
+                        turnState = clawTurnServoState.ORIGIN;
                         break;
                 }
             }
 
-            turnServo.setPosition(turnState.turnPosition);
+            clawTurnServo.setPosition(turnState.turnPosition);
             if(gamepad1.x) {
                 clawServo.setPosition(0);
             }
             else if(gamepad1.y) {
-                clawServo.setPosition(0.5);
+                clawServo.setPosition(1);
             }
             telemetry.addData("forward",gamepad1.left_stick_y);
             telemetry.addData("fun:",gamepad1.left_stick_x);
@@ -157,23 +135,22 @@ public class NoHeadCar extends LinearOpMode {
             telemetry.addData("clawServo:",clawServo.getPosition());
             telemetry.addData("heading:",botHeading);
             telemetry.addData("rawHeading:",od.getHeading());
-            //telemetry.addData("slideServo:",clawServo.getPosition());
+            telemetry.addData("slideMotor:",clawServo.getPosition());
+            telemetry.addData("isRightDPadPressed:",isRightDPadPressed.isPressed());
+            telemetry.addData("perv Button:",isRightDPadPressed.getLastButton());
             telemetry.update();
         }
     }
 
-    private enum TurnServoState {
-        ORIGIN(0),
-        LEFT30(-0.15),
-        LEFT60(-0.30),
-        LEFT90(-0.45),
-        RIGHT30(0.15),
-        RIGHT60(0.30),
-        RIGHT90(0.45);
+    private enum clawTurnServoState {
+        ORIGIN(1),
+        RIGHT30(0.8),
+        RIGHT60(0.6),
+        RIGHT90(0.4);
 
         public final double turnPosition;
 
-        TurnServoState(double position) {
+        clawTurnServoState(double position) {
             this.turnPosition = position;
         }
     }
