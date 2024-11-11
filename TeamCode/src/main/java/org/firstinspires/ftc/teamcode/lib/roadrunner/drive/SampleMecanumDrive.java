@@ -98,7 +98,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        od = new GoBildaLocalizer(hardwareMap);
+        od = new GoBildaLocalizer(hardwareMap, new Pose2d(-100,40));
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
@@ -240,20 +240,21 @@ public class SampleMecanumDrive extends MecanumDrive {
         double botHeading = od.getHeading() - yawHeading;
 
         // Rotate the movement direction counter to the bot's rotation
-        double rotX = vel.getY() * Math.cos(-botHeading) - vel.getX() * Math.sin(-botHeading);
-        double rotY = vel.getY() * Math.sin(-botHeading) + vel.getX() * Math.cos(-botHeading);
+        double rotX = vel.getX() * Math.cos(-botHeading) - vel.getY() * Math.sin(-botHeading);
+        double rotY = vel.getX() * Math.sin(-botHeading) + vel.getY() * Math.cos(-botHeading);
 
-        double denom = Math.max(Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
+        double denom = Math.max(Math.abs(rotX) + Math.abs(rotY)
                 + Math.abs(drivePower.getHeading()),1);
         vel = new Pose2d(
-                drivePower.getX(),
-                drivePower.getY(),
+                rotX,
+                rotY,
                 drivePower.getHeading()
         ).div(denom);
 
         setDrivePower(vel);
     }
 
+    public double getHeading() { return od.getHeading() - yawHeading; }
     public void resetHeading() { yawHeading = od.getHeading(); }
 
     public void setWeightedDrivePower(Pose2d drivePower) {

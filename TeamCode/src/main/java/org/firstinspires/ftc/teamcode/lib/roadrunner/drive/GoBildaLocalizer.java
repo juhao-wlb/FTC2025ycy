@@ -19,11 +19,11 @@ import lombok.experimental.ExtensionMethod;
 public class GoBildaLocalizer implements Localizer {
     private final GoBildaPinpointDriver odometry;
 
-    public GoBildaLocalizer(final HardwareMap hardwareMap) {
+    public GoBildaLocalizer(final HardwareMap hardwareMap, final Pose2d mountOffsets) {
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odometry.setOffsets(-100,40);
+        odometry.setOffsets(mountOffsets.getX(),mountOffsets.getY());
         odometry.resetPosAndIMU();
     }
 
@@ -54,6 +54,13 @@ public class GoBildaLocalizer implements Localizer {
     public double getHeadingVelocity() {
         odometry.update();
         return odometry.getHeadingVelocity();
+    }
+
+    /**
+     * IMPORTANT: Requires *stationary* robot.
+     */
+    public void recalibrateIMU(){
+        odometry.recalibrateIMU();
     }
 
     @Override

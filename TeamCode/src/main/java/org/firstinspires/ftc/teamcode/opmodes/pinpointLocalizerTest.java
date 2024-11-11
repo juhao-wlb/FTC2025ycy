@@ -1,27 +1,39 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.GoBildaLocalizer;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.GoBildaPinPointLocalizer;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
 
-@TeleOp(name = "pinPointTestTeleOP")
-public class Test extends LinearOpMode {
-    private GoBildaPinPointLocalizer odometry;
+@TeleOp(name = "pinPointTestTeleOP") @Config
+public class pinpointLocalizerTest extends LinearOpMode {
+//    private GoBildaLocalizer odometry;
+    private SampleMecanumDrive drive;
+    static public boolean test;
     @Override
     public void runOpMode() throws InterruptedException {
 
-        odometry = new GoBildaPinPointLocalizer(hardwareMap);
+//        odometry = new GoBildaLocalizer(hardwareMap, new Pose2d(-100, 40));
+        drive = new SampleMecanumDrive(hardwareMap);
         waitForStart();
         while(opModeIsActive()){
+            drive.setFieldRelativeDrivePower(new Pose2d(
+                    -gamepad1.left_stick_y,
+                    -gamepad1.left_stick_x,
+                    -gamepad1.right_stick_x
+            ));
+            telemetry.addData("heading:",drive.getHeading());
+            telemetry.addData("positions:",drive.getPoseEstimate());
+            telemetry.addData("velocities:",drive.getPoseVelocity());
+            if(gamepad1.a){
+                drive.resetHeading();
+//                odometry.recalibrateIMU();
+            }
             telemetry.update();
-            telemetry.addData("heading:",odometry.getHeading());
-            telemetry.addData("positions:",odometry.getWheelPositions());
-            telemetry.addData("velocities:",odometry.getWheelVelocities());
         }
     }
 }
