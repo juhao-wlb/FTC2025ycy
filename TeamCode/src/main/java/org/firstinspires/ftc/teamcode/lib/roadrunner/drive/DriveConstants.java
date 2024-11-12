@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-    public static final RobotType currentRobot = RobotType.BETA;
+    public static final RobotType currentRobot = RobotType.ALPHA;
 
     public enum RobotType {
         ALPHA,
@@ -45,8 +45,7 @@ public class DriveConstants {
 
     // DO NOT TOUCH THESE VALUES ref. https://learnroadrunner.com/drive-constants.html#run-using-encoder-motor-velo-pid
     public static final boolean RUN_USING_ENCODER = false;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -66,9 +65,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = 0;
-    public static double kStatic = 0;
+    public static double kV = currentRobot==RobotType.ALPHA?        0.00955 :   1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = currentRobot==RobotType.ALPHA?        0.002   :   0;
+    public static double kStatic = currentRobot==RobotType.ALPHA?   0.05    :   0;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -77,9 +76,9 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 30;
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA?87.53357957701085:30;
     public static double MAX_ACCEL = 30;
-    public static double MAX_ANG_VEL = Math.toRadians(60);
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?143.8430517241895:60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
     /*
