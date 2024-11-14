@@ -85,10 +85,12 @@ public class AlphaCar extends LinearOpMode {
             else if(gamepad1.right_bumper) slideMotor.setPower(-1);
             else slideMotor.setPower(0);
 
+            boolean rightDPad = isRightDPadPressed.isPressed();
+
             if(gamepad1.a) {
                 yawOffset = od.getHeading() % 360;
             }
-            else if(isRightDPadPressed.isPressed()) {
+            else if(rightDPad) {
                 switch(turnState) {
                     case ORIGIN:
                         turnState = clawTurnServoState.RIGHT30;
@@ -136,7 +138,7 @@ public class AlphaCar extends LinearOpMode {
             telemetry.addData("heading:",botHeading);
             telemetry.addData("rawHeading:",od.getHeading());
             telemetry.addData("slideMotor:",clawServo.getPosition());
-            telemetry.addData("isRightDPadPressed:",isRightDPadPressed.isPressed());
+            telemetry.addData("isRightDPadPressed:",rightDPad);
             telemetry.addData("perv Button:",isRightDPadPressed.getLastButton());
             telemetry.update();
         }
