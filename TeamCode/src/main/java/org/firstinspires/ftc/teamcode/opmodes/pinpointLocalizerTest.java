@@ -5,9 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.GoBildaLocalizer;
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.GoBildaPinPointLocalizer;
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 @TeleOp(name = "pinPointTestTeleOP") @Config
 public class pinpointLocalizerTest extends LinearOpMode {
@@ -45,7 +43,7 @@ public class pinpointLocalizerTest extends LinearOpMode {
 //import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.DcMotor;
 //
-//import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
+//import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 //
 ///**
 // * This is a simple teleop routine for testing localization. Drive the robot around like a normal

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lib.roadrunner.drive;
+package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -76,7 +76,7 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = currentRobot==RobotType.ALPHA?87.53357957701085:30;
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
     public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?143.8430517241895:60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);

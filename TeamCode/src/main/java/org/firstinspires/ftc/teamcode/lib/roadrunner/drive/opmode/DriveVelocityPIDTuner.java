@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.lib.roadrunner.drive.opmode;
 
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.kV;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 import java.util.List;
 

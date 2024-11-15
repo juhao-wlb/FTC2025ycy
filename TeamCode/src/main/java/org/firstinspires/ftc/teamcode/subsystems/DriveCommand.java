@@ -1,26 +1,38 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants;
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
+
+import java.util.Optional;
 
 public class DriveCommand extends CommandBase {
     private final SampleMecanumDrive drive;
-    private final Trajectory trajectory;
+    private Trajectory trajectory = null;
+    private TrajectorySequence trajectorySequence = null;
 
-    public DriveCommand(SampleMecanumDrive mecanumDrive, Trajectory traj) {
-        drive = mecanumDrive;
-        trajectory = traj;
+    public DriveCommand(SampleMecanumDrive drive, Optional<Trajectory> traj, Optional<TrajectorySequence> trajs) {
+        this.drive = drive;
+        if(traj.isPresent() && trajs.isPresent()) {
+            throw new IllegalArgumentException("Cannot provide both Trajectory and TrajectorySequence");
+        }
+        trajectory = traj.orElse(null);
+        trajectorySequence = trajs.orElse(null);
     }
 
     @Override
     public void initialize() {
-        drive.setPoseEstimate(trajectory.start());
-        drive.followTrajectoryAsync(trajectory);
+        if(trajectory != null) {
+            drive.setPoseEstimate(trajectory.start());
+            drive.followTrajectoryAsync(trajectory);
+        }
+        else if(trajectorySequence != null) {
+            drive.setPoseEstimate(trajectorySequence.start());
+            drive.followTrajectorySequence(trajectorySequence);
+        }
+        else throw new IllegalArgumentException("No Trajectory or TrajectorySequence provide");
     }
 
     @Override

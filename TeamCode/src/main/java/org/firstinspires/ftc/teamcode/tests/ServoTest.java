@@ -15,7 +15,7 @@ public class ServoTest extends LinearOpMode {
 
     private final Telemetry telemetry_M = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     public static boolean read_only = false;
-    public static boolean reverse = true;
+    public static boolean reverse = false;
     public static double servo_pos1 = 1;
 
     public static String servo_name1 = "servo3";

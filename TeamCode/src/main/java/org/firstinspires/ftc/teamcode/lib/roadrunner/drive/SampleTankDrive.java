@@ -32,22 +32,23 @@ import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.Trajecto
 import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.lib.roadrunner.drive.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.kV;
 
 /*
  * Simple tank drive hardware implementation for REV hardware.
