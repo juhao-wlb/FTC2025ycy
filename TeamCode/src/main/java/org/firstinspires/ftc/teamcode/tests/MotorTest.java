@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.tests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,13 +25,14 @@ public class MotorTest extends LinearOpMode {
     public static boolean reverse_0 = false;
     public static boolean reset = true;
     public static boolean set_power_mode_or_set_position_mode = false;
-    public static String motor_name_0 = "leftBackMotor";
+    public static String motor_name_0 = "leftFrontMotor";
 
 
 
     @Override
     public void runOpMode() {
         DcMotorEx motor0 = hardwareMap.get(DcMotorEx.class, motor_name_0);
+
         motor0.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         waitForStart();
         if (reset) {
