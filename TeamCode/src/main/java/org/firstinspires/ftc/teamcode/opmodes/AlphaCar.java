@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.teamcode.lib.roadrunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 @TeleOp(name = "ycyAlphaTeleOP")
 public class AlphaCar extends LinearOpMode {
@@ -57,7 +57,7 @@ public class AlphaCar extends LinearOpMode {
             else if(gamepad1.right_bumper) slideMotor.setPower(-1);
             else slideMotor.setPower(0);
 
-            boolean rightDPad = isRightDPadPressed.update();
+            boolean rightDPad = isRightDPadPressed.isPressed();
 
             if(gamepad1.a) {
                 drive.resetHeading();
@@ -80,7 +80,7 @@ public class AlphaCar extends LinearOpMode {
 
                 }
             }
-            if(isLeftDPadPressed.update()) {
+            if(isLeftDPadPressed.isPressed()) {
                 telemetry.addLine("LD Pressed");
                 switch(turnState) {
                     case ORIGIN:

@@ -10,7 +10,7 @@ public class ToggleBoolean{
         buttonValue = supplier;
     }
 
-    public boolean update() {
+    public boolean isPressed() {
         boolean res = !previousButtonValue && buttonValue.getAsBoolean();
         previousButtonValue = buttonValue.getAsBoolean();
         return res;

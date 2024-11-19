@@ -83,8 +83,10 @@ public class BetaNovaCar extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 liftMotor.setPower(-1);
             } else liftMotor.setPower(0);
+
             //double upPower = liftUp.calculate(liftMotor.getCurrentPosition(),liftSetPoint);
             //double backPower = liftBack.calculate(liftMotor.getCurrentPosition(),liftSetPoint);
+
             if (isDpadLeft1.isPressed()) {
                 if (slideArmServo.getPosition() >= 0.7) {
                     slideArmServo.setPosition(1);
@@ -108,13 +110,13 @@ public class BetaNovaCar extends LinearOpMode {
             }
 
             if (gamepad1.a) {
-                clawServo.setPosition(0);
+                clawServo.setPosition(0); //Close
             } else if (gamepad1.b) {
-                clawServo.setPosition(0.5);
+                clawServo.setPosition(0.5); //Open
             }
 
             if (gamepad2.a) {
-                wristServo.setPosition(0.05);
+                wristServo.setPosition(0.05); //
             } else if (gamepad2.b) {
                 wristServo.setPosition(0.75);
             }
@@ -127,9 +129,9 @@ public class BetaNovaCar extends LinearOpMode {
             wristTurnServo.setPosition(wristTurnPosition);
 
             if (gamepad2.x) {
-                intakeClawServo.setPosition(0.3);
+                intakeClawServo.setPosition(0.3); //Up
             } else if (gamepad2.y) {
-                intakeClawServo.setPosition(0.7);
+                intakeClawServo.setPosition(0.7); //Down
             }
 
             if (isDpadUp2.isPressed() && slideServoPosition + 0.05 <= 1) {
