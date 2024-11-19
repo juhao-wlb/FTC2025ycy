@@ -14,15 +14,14 @@ public class StartCommand extends CommandBase {
     private final BooleanSupplier startRunnable2Until;
     private final Runnable runnable1;
     private final Runnable runnable2;
-    private boolean shouldStop = false;
+    private boolean timerStarted = false;
     private final ElapsedTime timer = new ElapsedTime();
-    private final Telemetry telemetry;
 
-    public StartCommand (BooleanSupplier start2Until, Runnable runnable1, Runnable runnable2, Telemetry tele) {
+
+    public StartCommand (BooleanSupplier start2Until, Runnable runnable1, Runnable runnable2) {
         startRunnable2Until = start2Until;
         this.runnable1 = runnable1;
         this.runnable2 = runnable2;
-        telemetry = tele;
     }
 
     @Override
@@ -34,25 +33,22 @@ public class StartCommand extends CommandBase {
     public void execute() {
         runnable1.run();
 
-        if (startRunnable2Until.getAsBoolean()){
+        if (startRunnable2Until.getAsBoolean() && !timerStarted){
             runnable2.run();
             timer.startTime();
-            telemetry.addData("startRunnable2Until", "yes");
+            timerStarted = true;
         }
-        else {
-            telemetry.addData("startRunnable2Until", "no");
-        }
-
-        telemetry.addData("Boolean", startRunnable2Until.getAsBoolean());
-        telemetry.update();
 
     }
 
     @Override
+    public void end(boolean interrupted) {
+        timerStarted = false;
+    }
+
+    @Override
     public boolean isFinished() {
-        telemetry.addData("startRunnable2Until", "finished");
-        telemetry.update();
-        return timer.now(TimeUnit.MILLISECONDS) > 100;
+        return timer.time(TimeUnit.MILLISECONDS) > 500;
     }
 
 }

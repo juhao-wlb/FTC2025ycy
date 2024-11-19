@@ -24,12 +24,11 @@ public class TXBetaBot extends CommandOpMode {
         lift = new Lift(hardwareMap);
         liftClaw = new LiftClaw(hardwareMap);
 
-        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenReleased(
+        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
             new StartCommand(
-                    () -> lift.getCurrentPosition() > 400,
+                    () -> lift.getCurrentPosition() > 200,
                     () -> lift.setGoal(Lift.Goal.BASKET),
-                    liftClaw::upLiftArm,
-                    telemetry
+                    liftClaw::upLiftArm
             )
         );
 
