@@ -2,16 +2,13 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
-import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.onbotjava.handlers.objbuild.WaitForBuild;
 import org.firstinspires.ftc.teamcode.lib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.subsystems.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.TrajectoryManager;
 
 import java.util.Optional;
@@ -35,7 +32,7 @@ public class BetaAuto extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         CommandScheduler.getInstance().schedule(
-                new DriveCommand(drive, Optional.ofNullable(null), Optional.ofNullable(trajs1))
+                new AutoDriveCommand(drive, Optional.ofNullable(null), Optional.ofNullable(trajs1))
 
         );
 

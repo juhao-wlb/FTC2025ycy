@@ -2,13 +2,15 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.StartCommand;
+import org.firstinspires.ftc.teamcode.commands.StartUntilCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftClaw;
 
@@ -24,12 +26,20 @@ public class TXBetaBot extends CommandOpMode {
         lift = new Lift(hardwareMap);
         liftClaw = new LiftClaw(hardwareMap);
 
+//        gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+//            new StartUntilCommand(
+//                    () -> lift.getCurrentPosition() > 200,
+//                    () -> lift.setGoal(Lift.Goal.BASKET),
+//                    liftClaw::upLiftArm
+//            )
+//        );
+
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-            new StartCommand(
-                    () -> lift.getCurrentPosition() > 200,
-                    () -> lift.setGoal(Lift.Goal.BASKET),
-                    liftClaw::upLiftArm
-            )
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> lift.setGoal(Lift.Goal.BASKET)),
+                        new WaitUntilCommand(() -> lift.getCurrentPosition() > 200)
+                                .andThen(new InstantCommand(liftClaw::upLiftArm))
+                )
         );
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(

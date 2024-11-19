@@ -3,14 +3,10 @@ package org.firstinspires.ftc.teamcode.commands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.subsystems.Lift;
-import org.firstinspires.ftc.teamcode.subsystems.LiftClaw;
-
 import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
-public class StartCommand extends CommandBase {
+public class StartUntilCommand extends CommandBase {
     private final BooleanSupplier startRunnable2Until;
     private final Runnable runnable1;
     private final Runnable runnable2;
@@ -18,7 +14,10 @@ public class StartCommand extends CommandBase {
     private final ElapsedTime timer = new ElapsedTime();
 
 
-    public StartCommand (BooleanSupplier start2Until, Runnable runnable1, Runnable runnable2) {
+    /**
+    * Execute runnable1 first and execute runnable2 until
+    * */
+    public StartUntilCommand(BooleanSupplier start2Until, Runnable runnable1, Runnable runnable2) {
         startRunnable2Until = start2Until;
         this.runnable1 = runnable1;
         this.runnable2 = runnable2;

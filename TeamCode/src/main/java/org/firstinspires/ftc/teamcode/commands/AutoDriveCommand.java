@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.commands;
 
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.arcrobotics.ftclib.command.CommandBase;
@@ -8,12 +8,12 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 import java.util.Optional;
 
-public class DriveCommand extends CommandBase {
+public class AutoDriveCommand extends CommandBase {
     private final SampleMecanumDrive drive;
     private Trajectory trajectory = null;
     private TrajectorySequence trajectorySequence = null;
 
-    public DriveCommand(SampleMecanumDrive drive, Optional<Trajectory> traj, Optional<TrajectorySequence> trajs) {
+    public AutoDriveCommand(SampleMecanumDrive drive, Optional<Trajectory> traj, Optional<TrajectorySequence> trajs) {
         this.drive = drive;
         if(traj.isPresent() && trajs.isPresent()) {
             throw new IllegalArgumentException("Cannot provide both Trajectory and TrajectorySequence");
