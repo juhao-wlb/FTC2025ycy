@@ -14,11 +14,12 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 public class AlphaCar extends LinearOpMode {
     private Servo clawServo, clawTurnServo;
     private DcMotor slideMotor, leftLiftMotor, rightLiftMotor;
-    private clawTurnServoState turnState = clawTurnServoState.ORIGIN;
+//    private clawTurnServoState turnState = clawTurnServoState.ORIGIN;
     private SampleMecanumDrive drive;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        double position = 0;
         clawServo = hardwareMap.get(Servo.class,"clawServo");
         clawTurnServo = hardwareMap.get(Servo.class,"clawTurnServo");
         slideMotor = hardwareMap.get(DcMotor.class,"slideMotor");
@@ -29,9 +30,8 @@ public class AlphaCar extends LinearOpMode {
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         drive = new SampleMecanumDrive(hardwareMap);
-        ToggleBoolean isRightDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_right);
-        ToggleBoolean isLeftDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_left);
-
+        ToggleBoolean isRightDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_right, telemetry);
+        ToggleBoolean isLeftDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_left, telemetry);
         waitForStart();
         while(opModeIsActive()){
 
@@ -64,44 +64,52 @@ public class AlphaCar extends LinearOpMode {
             }
             if(rightDPad) {
                 telemetry.addLine("RD Pressed");
-                switch(turnState) {
-                    case ORIGIN:
-                        turnState = clawTurnServoState.RIGHT30;
-                        break;
-                    case RIGHT90:
-                        turnState = clawTurnServoState.RIGHT90;
-                        break;
-                    case RIGHT60:
-                        turnState = clawTurnServoState.RIGHT90;
-                        break;
-                    case RIGHT30:
-                        turnState = clawTurnServoState.RIGHT60;
-                        break;
-
+                position += 0.1;
+                if(position>1){
+                    position = 1;
                 }
+//                switch(turnState) {
+//                    case ORIGIN:
+//                        turnState = clawTurnServoState.RIGHT30;
+//                        break;
+//                    case RIGHT90:
+//                        turnState = clawTurnServoState.RIGHT90;
+//                        break;
+//                    case RIGHT60:
+//                        turnState = clawTurnServoState.RIGHT90;
+//                        break;
+//                    case RIGHT30:
+//                        turnState = clawTurnServoState.RIGHT60;
+//                        break;
+//
+//                }
             }
             if(isLeftDPadPressed.isPressed()) {
                 telemetry.addLine("LD Pressed");
-                switch(turnState) {
-                    case ORIGIN:
-                        turnState = clawTurnServoState.ORIGIN;
-                        break;
-                    case RIGHT90:
-                        turnState = clawTurnServoState.RIGHT60;
-                        break;
-                    case RIGHT60:
-                        turnState = clawTurnServoState.RIGHT30;
-                        break;
-                    case RIGHT30:
-                        turnState = clawTurnServoState.ORIGIN;
-                        break;
+                position -= 0.1;
+                if(position<0){
+                    position = 0;
                 }
+//                switch(turnState) {
+//                    case ORIGIN:
+//                        turnState = clawTurnServoState.ORIGIN;
+//                        break;
+//                    case RIGHT90:
+//                        turnState = clawTurnServoState.RIGHT60;
+//                        break;
+//                    case RIGHT60:
+//                        turnState = clawTurnServoState.RIGHT30;
+//                        break;
+//                    case RIGHT30:
+//                        turnState = clawTurnServoState.ORIGIN;
+//                        break;
+//                }
             }
 
-            clawTurnServo.setPosition(turnState.turnPosition);
+            clawTurnServo.setPosition(position);
             if(gamepad1.x) {
                 telemetry.addLine("X Pressed");
-                clawServo.setPosition(0);
+                clawServo.setPosition(0.7);
             }
             else if(gamepad1.y) {
                 telemetry.addLine("Y Pressed");

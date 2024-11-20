@@ -18,7 +18,7 @@ public class ServoTest extends LinearOpMode {
     public static boolean reverse = false;
     public static double servo_pos1 = 1;
 
-    public static String servo_name1 = "servo3";
+    public static String servo_name1 = "clawTurnServo";
     public static String servo_name2 = "doorRight";
     private Servo servo0 = null;
     private Servo servo1 = null;
