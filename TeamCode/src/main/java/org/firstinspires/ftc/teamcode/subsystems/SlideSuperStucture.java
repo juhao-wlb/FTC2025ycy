@@ -167,7 +167,8 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public boolean slideAtSetpoint(){
-        return MathUtils.isNear(slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage(), slideExtensionVal, 0.01);
+        // Prob. rot [0-1] -> [0-360]?
+        return MathUtils.isNear(slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage(), slideExtensionVal * -0.58095238095239393939393939393939 + 0.70137085137084848484848484848485, 0.01);
     }
 
 

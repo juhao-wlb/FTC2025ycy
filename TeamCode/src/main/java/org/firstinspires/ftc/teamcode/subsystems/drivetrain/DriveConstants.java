@@ -41,7 +41,7 @@ public class DriveConstants {
      * These are motor constants that should be listed online for your motors.
      */
     public static final double TICKS_PER_REV = 384.5; // From https://learnroadrunner.com/drive-constants.html#ticks-per-rev-max-rpm -> https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
-    public static final double MAX_RPM = 435; // From https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
+    public static final double MAX_RPM = currentRobot==RobotType.ALPHA?435:312; // From https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
 
     // DO NOT TOUCH THESE VALUES ref. https://learnroadrunner.com/drive-constants.html#run-using-encoder-motor-velo-pid
     public static final boolean RUN_USING_ENCODER = false;

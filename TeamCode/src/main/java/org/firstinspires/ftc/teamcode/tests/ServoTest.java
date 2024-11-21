@@ -5,6 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -19,8 +20,10 @@ public class ServoTest extends LinearOpMode {
     public static double servo_pos1 = 1;
 
     public static String servo_name1 = "clawTurnServo";
+    public static String servo_encoder_name = "";
     public static String servo_name2 = "doorRight";
     private Servo servo0 = null;
+    private AnalogInput encoder0 = null;
     private Servo servo1 = null;
 
     private boolean prevVal = false;
@@ -30,6 +33,9 @@ public class ServoTest extends LinearOpMode {
     public void runOpMode() {
 
         servo0 = hardwareMap.get(Servo.class, servo_name1);
+        if(servo_encoder_name!=""){
+            encoder0 = hardwareMap.get(AnalogInput.class, servo_encoder_name);
+        }
         //servo1 = hardwareMap.get(Servo.class, servo_name2);
         //upperMagnetic = hardwareMap.get(TouchSensor.class, "upperMagnetic");
         if (reverse){
@@ -37,6 +43,11 @@ public class ServoTest extends LinearOpMode {
         }
         waitForStart();
         while (opModeIsActive()) {
+
+            if(servo_encoder_name!=""){
+                telemetry_M.addData("EncoderPosition (Voltage)", encoder0.getVoltage());
+                telemetry_M.addData("AnalogMaxVoltage", encoder0.getMaxVoltage());
+            }
 
             if (!read_only) {
                 servo0.setPosition(servo_pos1);
