@@ -81,7 +81,7 @@ public class SlideSuperStucture extends SubsystemBase {
         );
     }
 
-    public Command handoffCommand() {
+    public Command handoffCommand(boolean isOpen) {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> goal = Goal.HANDOFF),
                 new InstantCommand(() ->
@@ -93,9 +93,13 @@ public class SlideSuperStucture extends SubsystemBase {
                 new InstantCommand(() -> wristServo.setPosition(Goal.HANDOFF.wristPos)),
                 new WaitCommand(200),
                 new InstantCommand(() -> slideArmServo.setPosition(Goal.HANDOFF.slideArmPos)),
-                new WaitUntilCommand(this::slideAtSetpoint),
+                isOpen?new WaitCommand(300):new WaitUntilCommand(this::slideAtSetpoint),
                 new InstantCommand(() -> slideExtensionVal = Goal.HANDOFF.slideExtension)
         );
+    }
+
+    public Command handoffCommand() {
+        return handoffCommand(false);
     }
 
     public void openIntakeClaw() {
@@ -168,7 +172,11 @@ public class SlideSuperStucture extends SubsystemBase {
 
     public boolean slideAtSetpoint(){
         // Prob. rot [0-1] -> [0-360]?
-        return MathUtils.isNear(slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage(), slideExtensionVal * -0.58095238095239393939393939393939 + 0.70137085137084848484848484848485, 0.01);
+        return MathUtils.isNear(getSlidePosition(), slideExtensionVal * -0.58095238095239393939393939393939 + 0.70137085137084848484848484848485, 0.01);
+    }
+
+    public double getSlidePosition(){
+        return slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage();
     }
 
 
@@ -190,6 +198,8 @@ public class SlideSuperStucture extends SubsystemBase {
         telemetry.addData("Claw Position", intakeClawServo.getPosition());
         telemetry.addData("Slide Extension", slideExtensionVal);
         telemetry.addData("Turn Angle", turnAngleDeg);
+        telemetry.addData("Slide Position", getSlidePosition());
+        telemetry.addData("Slide Setpoint", slideExtensionVal);
         telemetry.update();
     }
 

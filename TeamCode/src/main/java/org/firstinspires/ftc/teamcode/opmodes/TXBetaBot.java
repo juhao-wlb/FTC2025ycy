@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import android.transition.Slide;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.FunctionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
@@ -22,12 +23,15 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.MecanumDrive;
 import org.firstinspires.ftc.teamcode.utils.FunctionalButton;
 
 @TeleOp(name = "TXTeleop")
+@Config
 public class TXBetaBot extends CommandOpMode {
     private GamepadEx gamepadEx1;
     private Lift lift;
     private LiftClaw liftClaw;
     private SlideSuperStucture slide;
     private MecanumDrive drive;
+
+    public static boolean isRaw = false;
 
     @Override
     public void initialize() {
@@ -80,7 +84,7 @@ public class TXBetaBot extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
                         && slide.getGoal() == SlideSuperStucture.Goal.AIM)
-                .whenPressed(slide.handoffCommand()
+                .whenPressed(slide.handoffCommand(isRaw)
                         .andThen(new WaitCommand(500))
                         .andThen(new InstantCommand(() -> liftClaw.closeClaw()))
                         .andThen(new WaitCommand(300))
