@@ -5,20 +5,24 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.WaitLambdaCommand;
+import org.firstinspires.ftc.teamcode.utils.MathUtils;
 
 import lombok.Getter;
 
 public class SlideSuperStucture extends SubsystemBase {
     private final Servo intakeClawServo, wristServo, wristTurnServo;
     private final Servo slideArmServo, slideLeftServo, slideRightServo;
+    AnalogInput /*slideLeftEncoder,*/ slideRightEncoder;
     private boolean hasGamepiece = false;
-    private static double slideExtensionVal = 0.95;
+    private static double slideExtensionVal = 0.675;
 
     private static double turnAngleDeg = 0;
     private TurnServo turnServo = TurnServo.DEG_0;
@@ -33,8 +37,10 @@ public class SlideSuperStucture extends SubsystemBase {
 
         slideLeftServo = hardwareMap.get(Servo.class, "slideLeftServo");
         slideLeftServo.setDirection(Servo.Direction.REVERSE);
+//        slideLeftEncoder = hardwareMap.get(AnalogInput.class, "slideLeftEncoder");
 
         slideRightServo = hardwareMap.get(Servo.class, "slideRightServo"); //1 stow
+        slideRightEncoder = hardwareMap.get(AnalogInput.class, "slideRightEncoder");
 
         intakeClawServo = hardwareMap.get(Servo.class, "intakeClawServo");// 0.3 close 0.7 open
         wristServo = hardwareMap.get(Servo.class, "wristServo"); //0.05 up 0.75 down
@@ -87,7 +93,7 @@ public class SlideSuperStucture extends SubsystemBase {
                 new InstantCommand(() -> wristServo.setPosition(Goal.HANDOFF.wristPos)),
                 new WaitCommand(200),
                 new InstantCommand(() -> slideArmServo.setPosition(Goal.HANDOFF.slideArmPos)),
-                new WaitCommand(300),
+                new WaitUntilCommand(this::slideAtSetpoint),
                 new InstantCommand(() -> slideExtensionVal = Goal.HANDOFF.slideExtension)
         );
     }
@@ -103,10 +109,10 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public enum Goal {
-        STOW(1, 0, 0, 0, 0.6),
+        STOW(0.95, 0, 0, 0, 0.6),
         AIM(slideExtensionVal, 0.85 , 0.75, turnAngleDeg, 0.6),
         GRAB(slideExtensionVal, 1, 0.75, turnAngleDeg, 0.3),
-        HANDOFF(0.92, 0.5, 0.05, 0, 0.3);
+        HANDOFF(0.925, 0.5, 0.05, 0, 0.3);
 
         private final double slideExtension;
         private final double slideArmPos;
@@ -141,8 +147,6 @@ public class SlideSuperStucture extends SubsystemBase {
                 turnServo = TurnServo.DEG_08;
                 break;
             case DEG_08:
-                turnAngleDeg = 0.8;
-                turnServo = TurnServo.DEG_08;
                 break;
         }
     }
@@ -150,8 +154,6 @@ public class SlideSuperStucture extends SubsystemBase {
     public void rightTurnServo() {
         switch (turnServo) {
             case DEG_0:
-                turnAngleDeg = 0;
-                turnServo = TurnServo.DEG_0;
                 break;
             case DEG_05:
                 turnAngleDeg = 0;
@@ -162,6 +164,10 @@ public class SlideSuperStucture extends SubsystemBase {
                 turnServo = TurnServo.DEG_05;
                 break;
         }
+    }
+
+    public boolean slideAtSetpoint(){
+        return MathUtils.isNear(slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage(), slideExtensionVal, 0.01);
     }
 
 

@@ -30,8 +30,8 @@ public class AlphaCar extends LinearOpMode {
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         drive = new SampleMecanumDrive(hardwareMap);
-        ToggleBoolean isRightDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_right, telemetry);
-        ToggleBoolean isLeftDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_left, telemetry);
+        ToggleBoolean isRightDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_right);
+        ToggleBoolean isLeftDPadPressed = new ToggleBoolean(() -> gamepad1.dpad_left);
         waitForStart();
         while(opModeIsActive()){
 
