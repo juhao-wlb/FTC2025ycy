@@ -16,13 +16,16 @@ import org.firstinspires.ftc.teamcode.commands.WaitLambdaCommand;
 import org.firstinspires.ftc.teamcode.utils.MathUtils;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class SlideSuperStucture extends SubsystemBase {
     private final Servo intakeClawServo, wristServo, wristTurnServo;
     private final Servo slideArmServo, slideLeftServo, slideRightServo;
     AnalogInput /*slideLeftEncoder,*/ slideRightEncoder;
     private boolean hasGamepiece = false;
-    private static double slideExtensionVal = 0.675;
+    private final static double MaxExtension = 1;
+    private final static double MinExtension = 0.75;
+    @Setter private static double slideExtensionVal = MaxExtension;
 
     private static double turnAngleDeg = 0;
     private TurnServo turnServo = TurnServo.DEG_0;
@@ -41,6 +44,7 @@ public class SlideSuperStucture extends SubsystemBase {
 
         slideRightServo = hardwareMap.get(Servo.class, "slideRightServo"); //1 stow
         slideRightEncoder = hardwareMap.get(AnalogInput.class, "slideRightEncoder");
+        slideRightServo.setDirection(Servo.Direction.FORWARD);
 
         intakeClawServo = hardwareMap.get(Servo.class, "intakeClawServo");// 0.3 close 0.7 open
         wristServo = hardwareMap.get(Servo.class, "wristServo"); //0.05 up 0.75 down
@@ -81,7 +85,7 @@ public class SlideSuperStucture extends SubsystemBase {
         );
     }
 
-    public Command handoffCommand(boolean isOpen) {
+    public Command handoffCommand() {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> goal = Goal.HANDOFF),
                 new InstantCommand(() ->
@@ -93,13 +97,9 @@ public class SlideSuperStucture extends SubsystemBase {
                 new InstantCommand(() -> wristServo.setPosition(Goal.HANDOFF.wristPos)),
                 new WaitCommand(200),
                 new InstantCommand(() -> slideArmServo.setPosition(Goal.HANDOFF.slideArmPos)),
-                isOpen?new WaitCommand(300):new WaitUntilCommand(this::slideAtSetpoint),
+                new WaitCommand(300),
                 new InstantCommand(() -> slideExtensionVal = Goal.HANDOFF.slideExtension)
         );
-    }
-
-    public Command handoffCommand() {
-        return handoffCommand(false);
     }
 
     public void openIntakeClaw() {
@@ -113,10 +113,10 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public enum Goal {
-        STOW(0.95, 0, 0, 0, 0.6),
+        STOW(1, 0, 0, 0, 0.6),
         AIM(slideExtensionVal, 0.85 , 0.75, turnAngleDeg, 0.6),
         GRAB(slideExtensionVal, 1, 0.75, turnAngleDeg, 0.3),
-        HANDOFF(0.925, 0.5, 0.05, 0, 0.3);
+        HANDOFF(0.935, 0.5, 0.05, 0, 0.3);
 
         private final double slideExtension;
         private final double slideArmPos;
@@ -132,12 +132,23 @@ public class SlideSuperStucture extends SubsystemBase {
         }
     }
 
+    public void adjustSlideExtension(double velocity, double dt){
+        slideExtensionVal = Range.clip(slideExtensionVal -velocity * dt, MinExtension, MaxExtension);
+    }
+
+    public void setSlideExtensionVal(double velocity, double dt){
+        slideExtensionVal = Range.clip(slideExtensionVal -velocity * dt, MinExtension, MaxExtension);
+    }
+
     public void forwardSlideExtension() {
-        slideExtensionVal += 0.05;
+//        telemetry.addLine("Extention++");
+        adjustSlideExtension(2.5, 0.02);
     }
 
     public void backwardSlideExtension() {
-        slideExtensionVal -= 0.05;
+//        telemetry.addLine("Extention--");
+//        slideExtensionVal -= velocity;
+        adjustSlideExtension(-2.5, 0.02);
     }
 
     public void leftTurnServo() {
@@ -172,11 +183,15 @@ public class SlideSuperStucture extends SubsystemBase {
 
     public boolean slideAtSetpoint(){
         // Prob. rot [0-1] -> [0-360]?
-        return MathUtils.isNear(getSlidePosition(), slideExtensionVal * -0.58095238095239393939393939393939 + 0.70137085137084848484848484848485, 0.01);
+        return MathUtils.isNear(getSlidePosition(), slideExtensionVal, 0.07);
+    }
+
+    public double getSlidePositionRaw(){
+        return slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage();
     }
 
     public double getSlidePosition(){
-        return slideRightEncoder.getVoltage() / slideRightEncoder.getMaxVoltage();
+        return 1 - getSlidePositionRaw();
     }
 
 
@@ -196,9 +211,10 @@ public class SlideSuperStucture extends SubsystemBase {
         telemetry.addData("Current State", goal);
         telemetry.addData("Bur Gemen", goal == Goal.HANDOFF);
         telemetry.addData("Claw Position", intakeClawServo.getPosition());
-        telemetry.addData("Slide Extension", slideExtensionVal);
+//        telemetry.addData("Slide Extension", slideExtensionVal);
         telemetry.addData("Turn Angle", turnAngleDeg);
         telemetry.addData("Slide Position", getSlidePosition());
+        telemetry.addData("Slide Position (Raw)", getSlidePositionRaw());
         telemetry.addData("Slide Setpoint", slideExtensionVal);
         telemetry.update();
     }

@@ -15,6 +15,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.LiftSuperStructure;
 import org.firstinspires.ftc.teamcode.commands.TeleopDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
 import org.firstinspires.ftc.teamcode.subsystems.LiftClaw;
@@ -29,6 +30,7 @@ public class TXBetaBot extends CommandOpMode {
     private Lift lift;
     private LiftClaw liftClaw;
     private SlideSuperStucture slide;
+    private LiftSuperStructure liftSuperStructure;
     private MecanumDrive drive;
 
     public static boolean isRaw = false;
@@ -41,6 +43,7 @@ public class TXBetaBot extends CommandOpMode {
         liftClaw = new LiftClaw(hardwareMap);
         slide = new SlideSuperStucture(hardwareMap, telemetry);
         drive = new MecanumDrive(hardwareMap);
+        liftSuperStructure = new LiftSuperStructure(lift, liftClaw);
 
         drive.setDefaultCommand(new TeleopDriveCommand(
                 drive, () -> -gamepadEx1.getLeftY(),
@@ -49,11 +52,7 @@ public class TXBetaBot extends CommandOpMode {
         ));
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> lift.setGoal(Lift.Goal.BASKET)),
-                        new WaitUntilCommand(() -> lift.getCurrentPosition() > 600)
-                                .andThen(new InstantCommand(liftClaw::upLiftArm))
-                )
+                liftSuperStructure.toNormalCommand()
         );
 
 //        gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -84,10 +83,10 @@ public class TXBetaBot extends CommandOpMode {
         new FunctionalButton(
                 () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_RIGHT)
                         && slide.getGoal() == SlideSuperStucture.Goal.AIM)
-                .whenPressed(slide.handoffCommand(isRaw)
+                .whenPressed(slide.handoffCommand()
                         .andThen(new WaitCommand(500))
                         .andThen(new InstantCommand(() -> liftClaw.closeClaw()))
-                        .andThen(new WaitCommand(300))
+                        .andThen(new WaitUntilCommand(slide::slideAtSetpoint))
                         .andThen(new InstantCommand(() -> slide.openIntakeClaw())), false);
 
 
@@ -98,26 +97,20 @@ public class TXBetaBot extends CommandOpMode {
 //                        .andThen(new InstantCommand(() -> liftClaw.closeClaw())), false
 //        );
 
+        final double TRIGGER_DEADBAND = 0.5;
+        final double SLIDE_EXTENSION_MAX_VELOCITY = 1000;
         new FunctionalButton(
-                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5
+                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > TRIGGER_DEADBAND
                     && slide.getGoal() != SlideSuperStucture.Goal.HANDOFF)
                 .whenHeld(
-                    new FunctionalCommand(
-                            ()->{},
-                            () -> slide.forwardSlideExtension(),
-                            (bool) ->{},
-                            () -> false)
+                    new InstantCommand(() -> slide.adjustSlideExtension((gamepad1.left_trigger-TRIGGER_DEADBAND)/(1-TRIGGER_DEADBAND) * SLIDE_EXTENSION_MAX_VELOCITY, 0.02))
         );
 
         new FunctionalButton(
-                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5
+                () -> gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > TRIGGER_DEADBAND
                     && slide.getGoal() != SlideSuperStucture.Goal.HANDOFF)
                 .whenHeld(
-                        new FunctionalCommand(
-                                ()->{},
-                                () -> slide.backwardSlideExtension(),
-                                (bool) ->{},
-                                () -> false)
+                        new InstantCommand(() -> slide.adjustSlideExtension(-(gamepad1.left_trigger-TRIGGER_DEADBAND)/(1-TRIGGER_DEADBAND) * SLIDE_EXTENSION_MAX_VELOCITY, 0.02))
         );
 
         gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
