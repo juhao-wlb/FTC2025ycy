@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -56,4 +57,6 @@ public class MecanumDrive extends SubsystemBase {
         rightFrontMotor.setPower(rightFrontPower);
         rightBackMotor.setPower(rightBackPower);
     }
+
+    public void moveToPose(Pose2d pose2d) {}
 }

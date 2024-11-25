@@ -1,13 +1,19 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.acmerobotics.roadrunner.util.InterpolatingTreeMap;
+
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.SlideSuperStucture;
 import org.firstinspires.ftc.teamcode.subsystems.AlignVision;
 
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
+import edu.wpi.first.math.interpolation.Interpolator;
+import edu.wpi.first.math.interpolation.InverseInterpolator;
+
 public class FineAimCommand extends CommandBase {
-    private final SampleMecanumDrive drive;
+    private final MecanumDrive drive;
     private final SlideSuperStucture slide;
     private final AlignVision vision;
     
@@ -18,14 +24,14 @@ public class FineAimCommand extends CommandBase {
     //private static final double MAX_SPEED = 0.3;
     private static final double TOLERANCE = 0.05;
     
-    public FineAimCommand(SampleMecanumDrive drive, SlideSuperStucture slide, AlignVision vision) {
+    public FineAimCommand(MecanumDrive drive, SlideSuperStucture slide, AlignVision vision) {
         this.drive = drive;
         this.slide = slide;
         this.vision = vision;
         
         // Initialize interpolating maps
-        xAdjustments = new InterpolatingTreeMap<>();
-        yAdjustments = new InterpolatingTreeMap<>();
+        xAdjustments = new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Interpolator.forDouble());
+        yAdjustments = new InterpolatingTreeMap<>(InverseInterpolator.forDouble(), Interpolator.forDouble());
         
 //        // Populate maps with calibrated values
 //        // These values should be tuned based on testing
@@ -64,7 +70,7 @@ public class FineAimCommand extends CommandBase {
         //yMove = Math.min(Math.max(yMove, -MAX_SPEED), MAX_SPEED);
         
         // Move robot using field-relative control
-        drive.moveRobot(-yMove, -xMove, 0);  // Forward/back, left/right, no rotation
+        drive.moveToPose(new Pose2d(-yMove, -xMove, 0));  // Forward/back, left/right, no rotation
         slide.setTurnAngleDeg(visionValues[2]);
     }
     
