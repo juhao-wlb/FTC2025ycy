@@ -26,7 +26,6 @@ public class SlideSuperStucture extends SubsystemBase {
     private final static double MaxExtension = 1;
     private final static double MinExtension = 0.75;
     @Setter private static double slideExtensionVal = MaxExtension;
-
     private static double turnAngleDeg = 0;
     private TurnServo turnServo = TurnServo.DEG_0;
 
@@ -34,8 +33,9 @@ public class SlideSuperStucture extends SubsystemBase {
     private boolean isIntakeClawOpen = false;
 
     private final Telemetry telemetry; //0 0.5 0.8
+    private final AlignVision alignVision;
 
-    public SlideSuperStucture(final HardwareMap hardwareMap, final Telemetry telemetry) {
+    public SlideSuperStucture(final HardwareMap hardwareMap, final Telemetry telemetry, AlignVision alignVision) {
         slideArmServo = hardwareMap.get(Servo.class, "slideArmServo"); //0.5 up 0.9 half 1 down
 
         slideLeftServo = hardwareMap.get(Servo.class, "slideLeftServo");
@@ -51,11 +51,18 @@ public class SlideSuperStucture extends SubsystemBase {
 
         wristTurnServo = hardwareMap.get(Servo.class, "wristTurnServo");
         this.telemetry = telemetry;
+        this.alignVision = alignVision;
         goal = Goal.STOW;
         telemetry.addData("Current State", goal);
         telemetry.update();
 
     }
+
+    public void setTurnAngleDeg(double deg) {
+        // TODO: Parse deg so that it is in the servo's range
+        turnAngleDeg = deg;
+    }
+
 
     public Command aimCommand() {
         return new SequentialCommandGroup(
@@ -99,6 +106,19 @@ public class SlideSuperStucture extends SubsystemBase {
                 new InstantCommand(() -> slideArmServo.setPosition(Goal.HANDOFF.slideArmPos)),
                 new WaitCommand(300),
                 new InstantCommand(() -> slideExtensionVal = Goal.HANDOFF.slideExtension)
+        );
+    }
+
+    public Command extendUntilTargetCommand() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> slideExtensionVal = MinExtension),
+                new WaitUntilCommand(() -> {
+                    if (alignVision.getBroadSearchVal() < 1000) {
+                        return true;
+                    }
+                    slideExtensionVal = Range.clip(slideExtensionVal + 0.01, MinExtension, MaxExtension);
+                    return false;
+                })
         );
     }
 
