@@ -19,7 +19,7 @@ public class LiftSuperStructure {
     public Command toHangCommand() {
         return new SequentialCommandGroup(
                 new InstantCommand()
-        )
+        );
     }
     public  Command toNormalCommand() {
         return new ParallelCommandGroup(
