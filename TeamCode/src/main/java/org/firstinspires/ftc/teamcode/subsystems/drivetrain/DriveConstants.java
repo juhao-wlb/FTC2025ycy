@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-    public static final RobotType currentRobot = RobotType.BETA;
+    public static final RobotType currentRobot = RobotType.ALPHA;
 
     public enum RobotType {
         ALPHA,

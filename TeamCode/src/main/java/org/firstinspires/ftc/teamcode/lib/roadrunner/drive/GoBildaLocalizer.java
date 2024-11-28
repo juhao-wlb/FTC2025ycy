@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.lib.GeomUtil;
 import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -22,8 +23,8 @@ public class GoBildaLocalizer implements Localizer {
     public GoBildaLocalizer(final HardwareMap hardwareMap, final Pose2d mountOffsets) {
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odometry.setOffsets(mountOffsets.getX(),mountOffsets.getY());
+        odometry.setEncoderResolution((DriveConstants.currentRobot == DriveConstants.RobotType.ALPHA)?GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD:GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+//        odometry.setOffsets(mountOffsets.getX(),mountOffsets.getY());
         odometry.resetPosAndIMU();
     }
 
