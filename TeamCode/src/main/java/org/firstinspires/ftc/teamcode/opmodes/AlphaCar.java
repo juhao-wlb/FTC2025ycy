@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.opmodes;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeInternal;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
@@ -12,8 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 @TeleOp(name = "ycyAlphaTeleOP")
 public class AlphaCar extends LinearOpMode {
-    private Servo clawServo, clawTurnServo;
-    private DcMotor slideMotor, leftLiftMotor, rightLiftMotor;
+    private Servo clawServo, clawTurnServo, slideServo;
+    private DcMotor leftLiftMotor, rightLiftMotor;
 //    private clawTurnServoState turnState = clawTurnServoState.ORIGIN;
     private SampleMecanumDrive drive;
 
@@ -22,7 +26,8 @@ public class AlphaCar extends LinearOpMode {
         double position = 0;
         clawServo = hardwareMap.get(Servo.class,"clawServo");
         clawTurnServo = hardwareMap.get(Servo.class,"clawTurnServo");
-        slideMotor = hardwareMap.get(DcMotor.class,"slideMotor");
+        clawTurnServo.setDirection(Servo.Direction.REVERSE);
+        slideServo = hardwareMap.get(Servo.class,"slideServo");
         leftLiftMotor = hardwareMap.get(DcMotor.class,"leftLiftMotor");
         rightLiftMotor = hardwareMap.get(DcMotor.class,"rightLiftMotor");
         leftLiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -53,9 +58,8 @@ public class AlphaCar extends LinearOpMode {
                 leftLiftMotor.setPower(0);
                 rightLiftMotor.setPower(0);
             }
-            if(gamepad1.left_bumper) slideMotor.setPower(1);
-            else if(gamepad1.right_bumper) slideMotor.setPower(-1);
-            else slideMotor.setPower(0);
+            if(gamepad1.left_bumper) slideServo.setPosition(0.73);
+            else if(gamepad1.right_bumper) slideServo.setPosition(0.17);
 
             boolean rightDPad = isRightDPadPressed.isPressed();
 
@@ -109,11 +113,11 @@ public class AlphaCar extends LinearOpMode {
             clawTurnServo.setPosition(position);
             if(gamepad1.x) {
                 telemetry.addLine("X Pressed");
-                clawServo.setPosition(0.7);
+                clawServo.setPosition(0.2);
             }
             else if(gamepad1.y) {
                 telemetry.addLine("Y Pressed");
-                clawServo.setPosition(1);
+                clawServo.setPosition(0.66);
             }
             telemetry.addData("forward",gamepad1.left_stick_y);
             telemetry.addData("fun:",gamepad1.left_stick_x);
