@@ -33,6 +33,7 @@ public class LocalizationTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive.setPoseEstimate(new Pose2d(54,-54));
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

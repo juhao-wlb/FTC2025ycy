@@ -16,9 +16,9 @@ import lombok.Getter;
 
 public class SlideSuperStucture extends SubsystemBase {
     private final Servo intakeClawServo, wristServo, wristTurnServo;
-    private final Servo slideArmServo, slideLeftServo, slideRightServo;
+    private final Servo slideArmServo, slideRightServo;
     private boolean hasGamepiece = false;
-    private static double slideExtensionVal = 0.95;
+    private static double slideExtensionVal = 0.875;
 
     private static double turnAngleDeg = 0;
     private TurnServo turnServo = TurnServo.DEG_0;
@@ -30,9 +30,6 @@ public class SlideSuperStucture extends SubsystemBase {
 
     public SlideSuperStucture(final HardwareMap hardwareMap, final Telemetry telemetry) {
         slideArmServo = hardwareMap.get(Servo.class, "slideArmServo"); //0.5 up 0.9 half 1 down
-
-        slideLeftServo = hardwareMap.get(Servo.class, "slideLeftServo");
-        slideLeftServo.setDirection(Servo.Direction.REVERSE);
 
         slideRightServo = hardwareMap.get(Servo.class, "slideRightServo"); //1 stow
 
@@ -103,10 +100,10 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public enum Goal {
-        STOW(1, 0, 0, 0, 0.6),
-        AIM(slideExtensionVal, 0.85 , 0.75, turnAngleDeg, 0.6),
-        GRAB(slideExtensionVal, 1, 0.75, turnAngleDeg, 0.3),
-        HANDOFF(0.92, 0.5, 0.05, 0, 0.3);
+        STOW(0.9, 0, 0, 0, 0.5),
+        AIM(slideExtensionVal, 0.85 , 0.75, turnAngleDeg, 0.5),
+        GRAB(slideExtensionVal, 1, 0.75, turnAngleDeg, 0.18),
+        HANDOFF(0.875, 0.5, 0.05, 0, 0.18);
 
         private final double slideExtension;
         private final double slideArmPos;
@@ -123,11 +120,11 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public void forwardSlideExtension() {
-        slideExtensionVal += 0.05;
+        slideExtensionVal = 0.875;
     }
 
     public void backwardSlideExtension() {
-        slideExtensionVal -= 0.05;
+        slideExtensionVal = 0.325;
     }
 
     public void leftTurnServo() {
@@ -183,6 +180,7 @@ public class SlideSuperStucture extends SubsystemBase {
         telemetry.addData("Claw Position", intakeClawServo.getPosition());
         telemetry.addData("Slide Extension", slideExtensionVal);
         telemetry.addData("Turn Angle", turnAngleDeg);
+        telemetry.addData("SLideServo Position",slideRightServo.getPosition());
         telemetry.update();
     }
 

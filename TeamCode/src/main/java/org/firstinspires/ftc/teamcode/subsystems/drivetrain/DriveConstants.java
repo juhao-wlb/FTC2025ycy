@@ -29,11 +29,11 @@ public class DriveConstants {
 
     public static final Pose2d xPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(155),Units.degreesToRadians(0))
-            : new Pose2d(Units.mmToInches(0),Units.mmToInches(-100),Units.degreesToRadians(0));
+            : new Pose2d(Units.mmToInches(0),Units.mmToInches(114.5),Units.degreesToRadians(0));
 
     public static final Pose2d yPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(-155),Units.degreesToRadians(90))
-            : new Pose2d(Units.mmToInches(40),Units.mmToInches(15),Units.degreesToRadians(90));
+            : new Pose2d(Units.mmToInches(-98),Units.mmToInches(15),Units.degreesToRadians(90));
 
 
 
@@ -76,8 +76,8 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
-    public static double MAX_ACCEL = 30;
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:64;
+    public static double MAX_ACCEL = 64;
     public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?143.8430517241895:60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 

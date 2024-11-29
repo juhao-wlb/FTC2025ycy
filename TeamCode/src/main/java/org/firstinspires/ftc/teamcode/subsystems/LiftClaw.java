@@ -16,7 +16,7 @@ public class LiftClaw extends SubsystemBase {
 
     public void switchLiftClaw() {
         if(isClawOpen) {
-            liftClawServo.setPosition(0);
+            liftClawServo.setPosition(0.25);
         }
         else {
             liftClawServo.setPosition(0.5);
@@ -29,15 +29,15 @@ public class LiftClaw extends SubsystemBase {
     }
 
     public void closeClaw() {
-        liftClawServo.setPosition(0);
+        liftClawServo.setPosition(0.25);
     }
 
     public void upLiftArm () {
-        liftArmServo.setPosition(1);
+        liftArmServo.setPosition(0.725);
     }
 
     public void foldLiftArm() {
-        liftArmServo.setPosition(0.25);
+        liftArmServo.setPosition(0.2);
     }
 
 }
