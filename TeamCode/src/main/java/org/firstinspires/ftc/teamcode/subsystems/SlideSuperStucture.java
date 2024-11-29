@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.WaitLambdaCommand;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class SlideSuperStucture extends SubsystemBase {
     private final Servo intakeClawServo, wristServo, wristTurnServo;
@@ -23,10 +24,12 @@ public class SlideSuperStucture extends SubsystemBase {
     private static double turnAngleDeg = 0;
     private TurnServo turnServo = TurnServo.DEG_0;
 
-    @Getter private Goal goal = Goal.STOW;
+    @Setter @Getter private Goal goal = Goal.STOW;
     private boolean isIntakeClawOpen = false;
 
     private final Telemetry telemetry; //0 0.5 0.8
+
+    @Getter @Setter private boolean normalHandoff = false;
 
     public SlideSuperStucture(final HardwareMap hardwareMap, final Telemetry telemetry) {
         slideArmServo = hardwareMap.get(Servo.class, "slideArmServo"); //0.5 up 0.9 half 1 down
@@ -40,7 +43,7 @@ public class SlideSuperStucture extends SubsystemBase {
         this.telemetry = telemetry;
         goal = Goal.STOW;
         telemetry.addData("Current State", goal);
-        telemetry.update();
+        //telemetry.update();
 
     }
 
@@ -67,7 +70,7 @@ public class SlideSuperStucture extends SubsystemBase {
                 new WaitCommand(100),
                 new InstantCommand(() -> intakeClawServo.setPosition(Goal.GRAB.clawAngle)),
                 new WaitCommand(100),
-                new InstantCommand(() -> slideArmServo.setPosition(Goal.AIM.slideArmPos)),
+                new InstantCommand(() -> slideArmServo.setPosition(Goal.HANDOFF.slideArmPos)),
                 new InstantCommand(() -> goal = Goal.AIM)
         );
     }
@@ -99,11 +102,24 @@ public class SlideSuperStucture extends SubsystemBase {
         isIntakeClawOpen = false;
     }
 
+    public void wristUp() {
+        wristServo.setPosition(0.75);
+    }
+
+    public void wristDown() {
+        wristServo.setPosition(0.05);
+    }
+
+    public void slideArmDown() {
+        slideArmServo.setPosition(0.85);
+    }
+
+
     public enum Goal {
-        STOW(0.9, 0, 0, 0, 0.5),
-        AIM(slideExtensionVal, 0.85 , 0.75, turnAngleDeg, 0.5),
+        STOW(1, 0, 0, 0, 0.5),
+        AIM(slideExtensionVal, 0.8 , 0.75, turnAngleDeg, 0.5),
         GRAB(slideExtensionVal, 1, 0.75, turnAngleDeg, 0.18),
-        HANDOFF(0.875, 0.5, 0.05, 0, 0.18);
+        HANDOFF(0.92, 0.5, 0.05, 0, 0.18);
 
         private final double slideExtension;
         private final double slideArmPos;
@@ -120,11 +136,11 @@ public class SlideSuperStucture extends SubsystemBase {
     }
 
     public void forwardSlideExtension() {
-        slideExtensionVal = 0.875;
+        slideExtensionVal = 1;
     }
 
     public void backwardSlideExtension() {
-        slideExtensionVal = 0.325;
+        slideExtensionVal = 0.375;
     }
 
     public void leftTurnServo() {
@@ -175,13 +191,13 @@ public class SlideSuperStucture extends SubsystemBase {
         slideRightServo.setPosition(Range.clip(slideExtensionVal, 0, 1));
 
 
-        telemetry.addData("Current State", goal);
-        telemetry.addData("Bur Gemen", goal == Goal.HANDOFF);
-        telemetry.addData("Claw Position", intakeClawServo.getPosition());
-        telemetry.addData("Slide Extension", slideExtensionVal);
-        telemetry.addData("Turn Angle", turnAngleDeg);
-        telemetry.addData("SLideServo Position",slideRightServo.getPosition());
-        telemetry.update();
+//        telemetry.addData("Current State", goal);
+//        telemetry.addData("Bur Gemen", goal == Goal.HANDOFF);
+//        telemetry.addData("Claw Position", intakeClawServo.getPosition());
+//        telemetry.addData("Slide Extension", slideExtensionVal);
+//        telemetry.addData("Turn Angle", turnAngleDeg);
+//        telemetry.addData("SLideServo Position",slideRightServo.getPosition());
+        //telemetry.update();
     }
 
 }

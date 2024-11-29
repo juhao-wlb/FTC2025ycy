@@ -20,13 +20,14 @@ public class PIDMotorTest extends LinearOpMode {
     private final Telemetry telemetry_M = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     public static int set_position = 0;
 
-    public static boolean read_only = true;
+    public static boolean read_only = false;
     public static boolean reverse_1 = false;
-    public static boolean brake = true;
+    public static boolean brake = false;
 
-    public static String motor_name_1 = "liftMotor";
-    public static double Kp = 0.0, Ki = 0.0 ,Kd = 0.0;
-    public static double kG = 0.0;
+    public static String motor_name_1 = "liftMotor"
+            ;
+    public static double Kp = 0.02, Ki = 0.0 ,Kd = 0.0;
+    public static double kG = 0.03;
     public final PIDController motorPID = new PIDController(Kp,Ki,Kd);
 
     public static DcMotorEx motor1;

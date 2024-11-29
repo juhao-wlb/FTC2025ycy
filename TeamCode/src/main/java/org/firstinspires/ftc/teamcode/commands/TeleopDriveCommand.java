@@ -13,17 +13,20 @@ public class TeleopDriveCommand extends CommandBase {
     private final DoubleSupplier rotate;
     private final DoubleSupplier fun;
     private final BooleanSupplier shouldReset;
+    private final BooleanSupplier shouldSlow;
 
     public TeleopDriveCommand(MecanumDrive drive,
                               DoubleSupplier forward,
                               DoubleSupplier fun,
                               DoubleSupplier rotate,
-                              BooleanSupplier shouldReset) {
+                              BooleanSupplier shouldReset,
+                              BooleanSupplier shouldSlow) {
         this.drive = drive;
         this.forward = forward;
         this.rotate = rotate;
         this.fun = fun;
         this.shouldReset = shouldReset;
+        this.shouldSlow = shouldSlow;
 
         addRequirements(drive);
     }
@@ -33,7 +36,17 @@ public class TeleopDriveCommand extends CommandBase {
         if (shouldReset.getAsBoolean()) {
             drive.reset();
         }
-        drive.moveRobot(forward.getAsDouble(), fun.getAsDouble(), rotate.getAsDouble());
+
+        double forwardValue = forward.getAsDouble();
+        double funValue = fun.getAsDouble();
+        double rotateValue = rotate.getAsDouble();
+
+        if (shouldSlow.getAsBoolean()) {
+            forwardValue *= 0.3;
+            funValue *= 0.3;
+            rotateValue *= 0.3;
+        }
+        drive.moveRobot(forwardValue, funValue, rotateValue);
     }
 
 }

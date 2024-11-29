@@ -37,7 +37,7 @@ public class LiftClaw extends SubsystemBase {
     }
 
     public void foldLiftArm() {
-        liftArmServo.setPosition(0.2);
+        liftArmServo.setPosition(0.15);
     }
 
 }
