@@ -177,6 +177,6 @@ public final class Units {
     }
 
     public static double inchesToMm(double inches) {
-        return 100 * inchesToMeters(inches);
+        return 1000 * inchesToMeters(inches);
     }
 }

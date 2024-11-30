@@ -57,7 +57,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2; // INCH!!
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?17.17:13.19; // INCH!!
+    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:13.19; // INCH!!
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -78,7 +78,7 @@ public class DriveConstants {
      */
     public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
     public static double MAX_ACCEL = 30;
-    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?139.94652169326997:60);
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
     /*
