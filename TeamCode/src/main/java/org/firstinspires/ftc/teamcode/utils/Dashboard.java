@@ -4,20 +4,22 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 public class Dashboard {
-    private static FtcDashboard dashboard;
-    public static TelemetryPacket packet = new TelemetryPacket();;
+  private static FtcDashboard dashboard;
+  public static TelemetryPacket packet = new TelemetryPacket();
+  ;
 
-    public static void setup() {
-        dashboard = FtcDashboard.getInstance();
-        dashboard.setTelemetryTransmissionInterval(25);
-    }
+  public static void setup() {
+    dashboard = FtcDashboard.getInstance();
+    dashboard.setTelemetryTransmissionInterval(25);
+  }
 
-    public static TelemetryPacket getPacket() {
-        return packet;
-    }
+  public static TelemetryPacket getPacket() {
+    return packet;
+  }
 
-    public static void sendTelemetry() {
-        dashboard.sendTelemetryPacket(packet);
-        packet = new TelemetryPacket();;
-    }
+  public static void sendTelemetry() {
+    dashboard.sendTelemetryPacket(packet);
+    packet = new TelemetryPacket();
+    ;
+  }
 }
