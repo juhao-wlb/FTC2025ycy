@@ -40,14 +40,9 @@ public class AlphaCar extends LinearOpMode {
 
             if(gamepad1.dpad_up) {
                 lift.setOpenLoop(1);
-            }
-            else if(gamepad1.dpad_down) {
+            }else if(gamepad1.dpad_down) {
                 lift.setOpenLoop(-1);
-            }
-//            else {
-//                leftLiftMotor.setPower(0);
-//                rightLiftMotor.setPower(0);
-//            }
+            }else lift.setOpenLoop(0);
             if(gamepad1.left_bumper) claw.aim(1, position);
             else if(gamepad1.right_bumper) claw.retract();
 
