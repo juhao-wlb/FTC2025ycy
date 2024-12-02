@@ -53,9 +53,9 @@ public class TXBetaBot extends CommandOpMode {
         .getGamepadButton(GamepadKeys.Button.X)
         .whenPressed(
             new ParallelCommandGroup(
-                new InstantCommand(() -> lift.setGoal(Lift.Goal.BASKET)),
-                new WaitUntilCommand(() -> lift.getCurrentPosition() > 600)
-                    .andThen(new InstantCommand(liftClaw::upLiftArm))));
+                    new InstantCommand(() -> lift.setGoal(Lift.Goal.BASKET)),
+                    new WaitUntilCommand(() -> lift.getCurrentPosition() > 600)
+                        .andThen(new InstantCommand(liftClaw::upLiftArm))));
 
     // Basket Drop and Back
     gamepadEx1

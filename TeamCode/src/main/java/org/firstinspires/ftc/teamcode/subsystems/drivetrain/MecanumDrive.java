@@ -18,6 +18,11 @@ public class MecanumDrive extends SubsystemBase {
     rightBackMotor = hardwareMap.get(DcMotor.class, "rightBackMotor");
     od = hardwareMap.get(GoBildaPinpointDriver.class, "od");
 
+    leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     od.resetPosAndIMU();
     od.setEncoderDirections(
         GoBildaPinpointDriver.EncoderDirection.FORWARD,
