@@ -5,13 +5,16 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.lib.GeomUtil;
+import org.firstinspires.ftc.teamcode.lib.Units;
 import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants;
 
 import lombok.experimental.ExtensionMethod;
 
@@ -19,12 +22,19 @@ import lombok.experimental.ExtensionMethod;
 public class GoBildaLocalizer implements Localizer {
     private final GoBildaPinpointDriver odometry;
 
-    public GoBildaLocalizer(final HardwareMap hardwareMap, final Pose2d mountOffsets) {
+    public GoBildaLocalizer(final HardwareMap hardwareMap, final Translation2d mountOffsets) {
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odometry.setEncoderResolution((DriveConstants.currentRobot == DriveConstants.RobotType.ALPHA)?GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD:GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odometry.setOffsets(mountOffsets.getX(),mountOffsets.getY());
         odometry.resetPosAndIMU();
+    }
+
+    public Translation2d getWheelOffsets(){
+        return new Translation2d(
+            odometry.getXOffset(),
+            odometry.getYOffset()
+        );
     }
 
     @NonNull

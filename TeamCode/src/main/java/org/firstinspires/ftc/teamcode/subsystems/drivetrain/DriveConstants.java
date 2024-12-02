@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-    public static final RobotType currentRobot = RobotType.BETA;
+    public static final RobotType currentRobot = RobotType.ALPHA;
 
     public enum RobotType {
         ALPHA,
@@ -57,7 +57,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2; // INCH!!
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-    public static double TRACK_WIDTH = 13.19; // INCH!!
+    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:13.19; // INCH!!
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -65,9 +65,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = currentRobot==RobotType.ALPHA?        0.00955 :   1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = currentRobot==RobotType.ALPHA?        0.002   :   0;
-    public static double kStatic = currentRobot==RobotType.ALPHA?   0.05    :   0;
+    public static double kV = currentRobot==RobotType.ALPHA?      0.014  :   1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = currentRobot==RobotType.ALPHA?      0.0015 :   0;
+    public static double kStatic = currentRobot==RobotType.ALPHA? 0.07   :   0;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -78,7 +78,7 @@ public class DriveConstants {
      */
     public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
     public static double MAX_ACCEL = 30;
-    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?143.8430517241895:60);
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:60);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
     /*

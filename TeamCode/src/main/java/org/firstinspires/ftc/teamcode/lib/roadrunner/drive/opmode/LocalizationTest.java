@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.lib.Units;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -39,6 +40,7 @@ public class LocalizationTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            telemetry.addData("Localizer position", drive.getOd().getWheelOffsets());
             drive.setFieldRelativeDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y,
@@ -55,6 +57,8 @@ public class LocalizationTest extends LinearOpMode {
             Pose2d pose = drive.getPoseEstimate();
             telemetry.addData("x", pose.getX());
             telemetry.addData("y", pose.getY());
+            telemetry.addData("xmm", Units.inchesToMm(pose.getX()));
+            telemetry.addData("ymm", Units.inchesToMm(pose.getY()));
             telemetry.addData("heading (deg)", Math.toDegrees(pose.getHeading()));
             telemetry.addData("xVelocity:",drive.getPoseVelocity().getX());
             telemetry.addData("yVelocity:",drive.getPoseVelocity().getY());
