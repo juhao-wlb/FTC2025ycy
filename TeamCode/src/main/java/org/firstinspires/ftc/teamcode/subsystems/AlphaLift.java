@@ -6,11 +6,15 @@ import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.utils.PIDMotionProfileController;
+
 @Config
 public class AlphaLift extends SubsystemBase {
     public static boolean UsePID = false;
     public static double kG = 0;
-    public static PIDFController liftPID = new PIDFController(0, 0, 0, 0);
+    public static PIDMotionProfileController leftLiftPID = new PIDMotionProfileController(0.015, 0, 0, 0.03, 0, 0, 0.10);
+    public static PIDMotionProfileController rightLiftPID = leftLiftPID.copy();
     private DcMotor leftLiftMotor, rightLiftMotor;
     private final HardwareMap hardwareMap;
     public AlphaLift(HardwareMap hm){
@@ -23,7 +27,8 @@ public class AlphaLift extends SubsystemBase {
         leftLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         if(UsePID){
-            leftLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void setOpenLoop(double vol){
@@ -33,12 +38,14 @@ public class AlphaLift extends SubsystemBase {
     @Override
     public void periodic(){
         if(UsePID){
-            double power = liftPID.calculate(leftLiftMotor.getCurrentPosition()) + kG;
+            double power = leftLiftPID.calculate(leftLiftMotor.getCurrentPosition()) + kG;
             leftLiftMotor.setPower(power);
+            power = rightLiftPID.calculate(rightLiftMotor.getCurrentPosition()) + kG;
             rightLiftMotor.setPower(power);
         }
     }
     public void setSetPoint(double pos){
-        liftPID.setSetPoint(pos);
+        leftLiftPID.setSetPoint(pos);
+        rightLiftPID.setSetPoint(pos);
     }
 }
