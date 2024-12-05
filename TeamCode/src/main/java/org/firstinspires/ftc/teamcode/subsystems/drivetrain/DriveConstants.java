@@ -2,10 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.lib.Units;
+import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+
+import lombok.Getter;
 
 /*
  * Constants shared between multiple drive types.
@@ -20,11 +25,12 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-    public static final RobotType currentRobot = RobotType.ALPHA;
+    public static final RobotType currentRobot = RobotType.BETA;
 
     public enum RobotType {
         ALPHA,
-        BETA
+        BETA,
+        GAMMA
     }
 
     public static final Pose2d xPose = currentRobot == RobotType.ALPHA
@@ -88,6 +94,37 @@ public class DriveConstants {
             RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaXLocalizerDirection;
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaYLocalizerDirection;
+    public static GoBildaPinpointDriver.GoBildaOdometryPods GoBildaLocalizerEncoderResolution;
+    public static Translation2dHelperClass GoBildaLocalizerPerpendicularOffset;
+    public static class Translation2dHelperClass{
+        @Getter
+        public double X, Y;
+        Translation2dHelperClass(double x, double y){
+            this.X = x;
+            this.Y = y;
+        }
+    }
+    static{
+        switch (currentRobot){
+            case ALPHA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(0, 4);
+                break;
+            case BETA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(-92.03742,104.03742);
+                break;
+            default:
+                RobotLog.ee("DriveConstants", "GoBildaPinpointDriver not configured for %s.", currentRobot.toString());
+        }
+    }
 
 
     public static double encoderTicksToInches(double ticks) {

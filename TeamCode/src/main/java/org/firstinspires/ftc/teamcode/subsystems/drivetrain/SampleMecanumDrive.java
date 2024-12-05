@@ -98,7 +98,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         // TODO: adjust the names of the following hardware devices to match your configuration
-        od = new GoBildaLocalizer(hardwareMap, DriveConstants.currentRobot==DriveConstants.RobotType.ALPHA?new Translation2d(0, 4):new Translation2d(-100,40));
+        od = new GoBildaLocalizer(hardwareMap, DriveConstants.GoBildaLocalizerPerpendicularOffset);
 
         leftFront = hardwareMap.get(DcMotorEx.class, "leftFrontMotor");
         leftRear = hardwareMap.get(DcMotorEx.class, "leftBackMotor");
