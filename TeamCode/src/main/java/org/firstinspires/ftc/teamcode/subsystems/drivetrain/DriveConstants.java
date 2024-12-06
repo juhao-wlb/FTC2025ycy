@@ -33,10 +33,12 @@ public class DriveConstants {
         GAMMA
     }
 
+    @Deprecated
     public static final Pose2d xPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(155),Units.degreesToRadians(0))
             : new Pose2d(Units.mmToInches(0),Units.mmToInches(-100),Units.degreesToRadians(0));
 
+    @Deprecated
     public static final Pose2d yPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(-155),Units.degreesToRadians(90))
             : new Pose2d(Units.mmToInches(40),Units.mmToInches(15),Units.degreesToRadians(90));
@@ -63,7 +65,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2; // INCH!!
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:13.19; // INCH!!
+    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:15.21; // INCH!!
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -71,9 +73,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = currentRobot==RobotType.ALPHA?      0.0135 :   1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = currentRobot==RobotType.ALPHA?      0.002  :   0;
-    public static double kStatic = currentRobot==RobotType.ALPHA? 0.052  :   0;
+    public static double kV = currentRobot==RobotType.ALPHA?      0.0135 :   0.015;//1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = currentRobot==RobotType.ALPHA?      0.002  :   0.002;
+    public static double kStatic = currentRobot==RobotType.ALPHA? 0.052  :   0.052;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -82,9 +84,9 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:63.0295389435408;
     public static double MAX_ACCEL = 30;
-    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:60);
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:142.9192604427183);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
     /*
