@@ -38,7 +38,7 @@ public class MecanumDrive extends SubsystemBase {
     yawOffset = od.getHeading();
   }
 
-  public void moveRobot(double forward, double fun, double turn) {
+  public void moveRobotFieldRelatice(double forward, double fun, double turn) {
     od.update();
 
     double botHeading = od.getHeading() - yawOffset;
@@ -61,5 +61,28 @@ public class MecanumDrive extends SubsystemBase {
     leftBackMotor.setPower(leftBackPower);
     rightFrontMotor.setPower(rightFrontPower);
     rightBackMotor.setPower(rightBackPower);
+  }
+
+  public void moveRobot(double forward, double fun, double turn) {
+    double rotX = forward * 1.1; // Counteract imperfect strafing
+    double rotY = fun;
+
+    // Denominator is the largest motor power (absolute value) or 1
+    // This ensures all the powers maintain the same ratio,
+    // but only if at least one is out of the range [-1, 1]
+    double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(turn), 1);
+    double leftFrontPower = (rotY + rotX + turn) / denominator;
+    double leftBackPower = (rotY - rotX + turn) / denominator;
+    double rightFrontPower = (rotY - rotX - turn) / denominator;
+    double rightBackPower = (rotY + rotX - turn) / denominator;
+
+    leftFrontMotor.setPower(leftFrontPower);
+    leftBackMotor.setPower(leftBackPower);
+    rightFrontMotor.setPower(rightFrontPower);
+    rightBackMotor.setPower(rightBackPower);
+  }
+
+  public void stop() {
+    moveRobot(0, 0, 0);
   }
 }

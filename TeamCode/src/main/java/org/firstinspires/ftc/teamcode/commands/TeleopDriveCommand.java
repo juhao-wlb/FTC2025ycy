@@ -45,6 +45,6 @@ public class TeleopDriveCommand extends CommandBase {
       funValue *= 0.3;
       rotateValue *= 0.3;
     }
-    drive.moveRobot(forwardValue, funValue, rotateValue);
+    drive.moveRobotFieldRelatice(forwardValue, funValue, rotateValue);
   }
 }

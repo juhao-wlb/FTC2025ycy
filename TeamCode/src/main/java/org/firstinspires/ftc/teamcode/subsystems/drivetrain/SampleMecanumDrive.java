@@ -80,14 +80,20 @@ public class SampleMecanumDrive extends MecanumDrive {
   private double yawHeading = 0;
 
   public SampleMecanumDrive(HardwareMap hardwareMap) {
-    super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
+    super(
+        kV,
+        kA,
+        kStatic,
+        TRACK_WIDTH,
+        TRACK_WIDTH,
+        LATERAL_MULTIPLIER); // Drive Constants are passed to here
 
     follower =
         new HolonomicPIDVAFollower(
             TRANSLATIONAL_PID,
             TRANSLATIONAL_PID,
             HEADING_PID,
-            new Pose2d(0.5, 0.5, Math.toRadians(5.0)),
+            new Pose2d(0.5, 0.5, Math.toRadians(5.0)), // Pose Error
             0.5);
 
     LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
