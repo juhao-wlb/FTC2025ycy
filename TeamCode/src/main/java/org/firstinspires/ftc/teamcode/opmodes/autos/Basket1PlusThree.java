@@ -114,7 +114,7 @@ public class Basket1PlusThree extends LinearOpMode {
         .schedule(
             new SequentialCommandGroup(
                 initialize(liftClaw, slide),
-                
+
                 new AutoDriveCommand(drive, trajs1).alongWith(upLiftToBasket(lift, liftClaw)),
                 stowArmFromBasket(lift, liftClaw),
 
