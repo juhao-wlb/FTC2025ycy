@@ -46,21 +46,20 @@ public class Lift extends SubsystemBase {
 
   public Command resetCommand() {
     return new StartEndCommand(
-            () -> {
-              runLiftOpen(-0.6);
-            },
-            () -> {
-              pidController.reset();
-              pidController.calculate(0);
-              runLiftOpen(0);
-              liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-              goal = Goal.STOW;
-              telemetry.addData("Lift Current Position", liftMotor.getCurrentPosition());
-              telemetry.addData("Error", pidController.getPositionError());
-              telemetry.update();
-            },
-            this)
-        .withTimeout(100);
+        () -> {
+          runLiftOpen(-0.6);
+        },
+        () -> {
+          pidController.reset();
+          pidController.calculate(0);
+          runLiftOpen(0);
+          liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+          goal = Goal.STOW;
+          telemetry.addData("Lift Current Position", liftMotor.getCurrentPosition());
+          telemetry.addData("Error", pidController.getPositionError());
+          telemetry.update();
+        },
+        this);
   }
 
   public double getCurrentPosition() {

@@ -105,7 +105,13 @@ public class SlideSuperStucture extends SubsystemBase {
   }
 
   public void slideArmDown() {
+    // This is down for stowing the liftArm when scoring the speciemen
     slideArmServo.setPosition(0.85);
+  }
+
+  public void slideArmUp() {
+    // This is up for the auto
+    slideArmServo.setPosition(0.8);
   }
 
   public enum Goal {

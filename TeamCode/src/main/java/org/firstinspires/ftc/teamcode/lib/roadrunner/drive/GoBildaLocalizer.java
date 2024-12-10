@@ -16,10 +16,10 @@ public class GoBildaLocalizer implements Localizer {
   public GoBildaLocalizer(final HardwareMap hardwareMap, final Pose2d mountOffsets) {
     odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
     odometry.setEncoderDirections(
-        GoBildaPinpointDriver.EncoderDirection.REVERSED,
-        GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        GoBildaPinpointDriver.EncoderDirection.FORWARD,
+        GoBildaPinpointDriver.EncoderDirection.REVERSED);
     odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-    odometry.setOffsets(mountOffsets.getX(), mountOffsets.getY());
+    odometry.setOffsets(-92.03742, 104.03742);
     odometry.resetPosAndIMU();
   }
 
