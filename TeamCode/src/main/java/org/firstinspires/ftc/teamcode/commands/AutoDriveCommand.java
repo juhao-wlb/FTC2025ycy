@@ -21,6 +21,9 @@ public class AutoDriveCommand extends CommandBase {
         trajectory = traj.orElse(null);
         trajectorySequence = trajs.orElse(null);
     }
+    public AutoDriveCommand(SampleMecanumDrive drive, TrajectorySequence trajs) {
+        this(drive,Optional.empty(), Optional.of(trajs));
+    }
 
     @Override
     public void initialize() {

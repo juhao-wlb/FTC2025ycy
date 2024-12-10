@@ -111,7 +111,7 @@ public class SlideSuperStucture extends SubsystemBase {
 
   public void slideArmUp() {
     // This is up for the auto
-    slideArmServo.setPosition(0.8);
+    slideArmServo.setPosition(Goal.AIM.slideArmPos);
   }
 
   public enum Goal {
