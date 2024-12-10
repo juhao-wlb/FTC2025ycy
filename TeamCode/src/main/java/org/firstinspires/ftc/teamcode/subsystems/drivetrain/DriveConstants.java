@@ -2,9 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.teamcode.lib.Units;
+import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+
+import lombok.Getter;
 
 /*
  * Constants shared between multiple drive types.
@@ -19,92 +25,120 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-  public static final RobotType currentRobot = RobotType.ALPHA;
+    public static final RobotType currentRobot = RobotType.BETA;
 
-  public enum RobotType {
-    ALPHA,
-    BETA
-  }
+    public enum RobotType {
+        ALPHA,
+        BETA,
+        GAMMA
+    }
 
-  public static final Pose2d xPose =
-      currentRobot == RobotType.ALPHA
-          ? new Pose2d(Units.mmToInches(-25), Units.mmToInches(155), Units.degreesToRadians(0))
-          : new Pose2d(Units.mmToInches(0), Units.mmToInches(114.5), Units.degreesToRadians(0));
+    @Deprecated
+    public static final Pose2d xPose = currentRobot == RobotType.ALPHA
+            ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(155),Units.degreesToRadians(0))
+            : new Pose2d(Units.mmToInches(0),Units.mmToInches(-100),Units.degreesToRadians(0));
 
-  public static final Pose2d yPose =
-      currentRobot == RobotType.ALPHA
-          ? new Pose2d(Units.mmToInches(-25), Units.mmToInches(-155), Units.degreesToRadians(90))
-          : new Pose2d(Units.mmToInches(-98), Units.mmToInches(15), Units.degreesToRadians(90));
+    @Deprecated
+    public static final Pose2d yPose = currentRobot == RobotType.ALPHA
+            ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(-155),Units.degreesToRadians(90))
+            : new Pose2d(Units.mmToInches(40),Units.mmToInches(15),Units.degreesToRadians(90));
 
-  /*
-   * These are motor constants that should be listed online for your motors.
-   */
-  public static final double TICKS_PER_REV =
-      537.7; // From https://learnroadrunner.com/drive-constants.html#ticks-per-rev-max-rpm ->
-  // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
-  public static final double MAX_RPM = 312; // From
-  // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
 
-  // DO NOT TOUCH THESE VALUES ref.
-  // https://learnroadrunner.com/drive-constants.html#run-using-encoder-motor-velo-pid
-  public static final boolean RUN_USING_ENCODER = false;
-  public static PIDFCoefficients MOTOR_VELO_PID =
-      new PIDFCoefficients(0, 0, 0, getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
-  /*
-   * These are physical constants that can be determined from your robot (including the track
-   * width; it will be tune empirically later although a rough estimate is important). Users are
-   * free to chose whichever linear distance unit they would like so long as it is consistently
-   * used. The default values were selected with inches in mind. Road runner uses radians for
-   * angular distances although most angular parameters are wrapped in Math.toRadians() for
-   * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
-   */
-  public static double WHEEL_RADIUS = 2; // INCH!!
-  public static double GEAR_RATIO =
-      1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-  public static double TRACK_WIDTH = 15.21; // INCH!!
+    /*
+     * These are motor constants that should be listed online for your motors.
+     */
+    public static final double TICKS_PER_REV = 537.7; // From https://learnroadrunner.com/drive-constants.html#ticks-per-rev-max-rpm -> https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
+    public static final double MAX_RPM = 312; // From https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
 
-  /*
-   * These are the feedforward parameters used to model the drive motor behavior. If you are using
-   * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
-   * motor encoders or have elected not to use them for velocity control, these values should be
-   * empirically tuned.
-   */
-  public static double kV = 0.015;
-  public static double kA = 0.002;
-  public static double kStatic = 0.052;
+    // DO NOT TOUCH THESE VALUES ref. https://learnroadrunner.com/drive-constants.html#run-using-encoder-motor-velo-pid
+    public static final boolean RUN_USING_ENCODER = false;
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0, getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
-  /*
-   * These values are used to generate the trajectories for you robot. To ensure proper operation,
-   * the constraints should never exceed ~80% of the robot's actual capabilities. While Road
-   * Runner is designed to enable faster autonomous motion, it is a good idea for testing to start
-   * small and gradually increase them later after everything is working. All distance units are
-   * inches.
-   */
-  public static double MAX_VEL = 63.3;
-  public static double MAX_ACCEL = 30;
-  public static double MAX_ANG_VEL = Math.toRadians(142.9);
-  public static double MAX_ANG_ACCEL = Math.toRadians(60);
+    /*
+     * These are physical constants that can be determined from your robot (including the track
+     * width; it will be tune empirically later although a rough estimate is important). Users are
+     * free to chose whichever linear distance unit they would like so long as it is consistently
+     * used. The default values were selected with inches in mind. Road runner uses radians for
+     * angular distances although most angular parameters are wrapped in Math.toRadians() for
+     * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
+     */
+    public static double WHEEL_RADIUS = 2; // INCH!!
+    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
+    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:15.21; // INCH!!
 
-  /*
-   * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
-   */
-  public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
-      RevHubOrientationOnRobot.LogoFacingDirection.UP;
-  public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-      RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+    /*
+     * These are the feedforward parameters used to model the drive motor behavior. If you are using
+     * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
+     * motor encoders or have elected not to use them for velocity control, these values should be
+     * empirically tuned.
+     */
+    public static double kV = currentRobot==RobotType.ALPHA?      0.0135 :   0.015;//1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = currentRobot==RobotType.ALPHA?      0.002  :   0.002;
+    public static double kStatic = currentRobot==RobotType.ALPHA? 0.052  :   0.052;
 
-  public static double encoderTicksToInches(double ticks) {
-    return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
-  }
+    /*
+     * These values are used to generate the trajectories for you robot. To ensure proper operation,
+     * the constraints should never exceed ~80% of the robot's actual capabilities. While Road
+     * Runner is designed to enable faster autonomous motion, it is a good idea for testing to start
+     * small and gradually increase them later after everything is working. All distance units are
+     * inches.
+     */
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:63.0295389435408;
+    public static double MAX_ACCEL = 30;
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:142.9192604427183);
+    public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
-  public static double rpmToVelocity(double rpm) {
-    return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;
-  }
+    /*
+     * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
+     */
+    public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
+            RevHubOrientationOnRobot.LogoFacingDirection.UP;
+    public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
-  public static double getMotorVelocityF(double ticksPerSecond) {
-    // see
-    // https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx
-    return 32767 / ticksPerSecond;
-  }
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaXLocalizerDirection;
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaYLocalizerDirection;
+    public static GoBildaPinpointDriver.GoBildaOdometryPods GoBildaLocalizerEncoderResolution;
+    public static Translation2dHelperClass GoBildaLocalizerPerpendicularOffset;
+    public static class Translation2dHelperClass{
+        @Getter
+        public double X, Y;
+        Translation2dHelperClass(double x, double y){
+            this.X = x;
+            this.Y = y;
+        }
+    }
+    static{
+        switch (currentRobot){
+            case ALPHA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(0, 4);
+                break;
+            case BETA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(-92.03742,104.03742);
+                break;
+            default:
+                RobotLog.ee("DriveConstants", "GoBildaPinpointDriver not configured for %s.", currentRobot.toString());
+        }
+    }
+
+
+    public static double encoderTicksToInches(double ticks) {
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+    }
+
+    public static double rpmToVelocity(double rpm) {
+        return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;
+    }
+
+    public static double getMotorVelocityF(double ticksPerSecond) {
+        // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx
+        return 32767 / ticksPerSecond;
+    }
 }
