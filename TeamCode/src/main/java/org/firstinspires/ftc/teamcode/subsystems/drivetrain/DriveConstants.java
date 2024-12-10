@@ -40,9 +40,9 @@ public class DriveConstants {
    * These are motor constants that should be listed online for your motors.
    */
   public static final double TICKS_PER_REV =
-      384.5; // From https://learnroadrunner.com/drive-constants.html#ticks-per-rev-max-rpm ->
+      537.7; // From https://learnroadrunner.com/drive-constants.html#ticks-per-rev-max-rpm ->
   // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
-  public static final double MAX_RPM = 435; // From
+  public static final double MAX_RPM = 312; // From
   // https://www.gobilda.com/5203-series-yellow-jacket-planetary-gear-motor-13-7-1-ratio-24mm-length-8mm-rex-shaft-435-rpm-3-3-5v-encoder/
 
   // DO NOT TOUCH THESE VALUES ref.
@@ -62,7 +62,7 @@ public class DriveConstants {
   public static double WHEEL_RADIUS = 2; // INCH!!
   public static double GEAR_RATIO =
       1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-  public static double TRACK_WIDTH = 13.19; // INCH!!
+  public static double TRACK_WIDTH = 15.21; // INCH!!
 
   /*
    * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -70,10 +70,9 @@ public class DriveConstants {
    * motor encoders or have elected not to use them for velocity control, these values should be
    * empirically tuned.
    */
-  public static double kV =
-      currentRobot == RobotType.ALPHA ? 0.00955 : 1.0 / rpmToVelocity(MAX_RPM);
-  public static double kA = currentRobot == RobotType.ALPHA ? 0.002 : 0;
-  public static double kStatic = currentRobot == RobotType.ALPHA ? 0.05 : 0;
+  public static double kV = 0.015;
+  public static double kA = 0.002;
+  public static double kStatic = 0.052;
 
   /*
    * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -82,10 +81,9 @@ public class DriveConstants {
    * small and gradually increase them later after everything is working. All distance units are
    * inches.
    */
-  public static double MAX_VEL = currentRobot == RobotType.ALPHA ? 87.53357957701085 : 64;
-  public static double MAX_ACCEL = 64;
-  public static double MAX_ANG_VEL =
-      Math.toRadians(currentRobot == RobotType.ALPHA ? 143.8430517241895 : 60);
+  public static double MAX_VEL = 63.3;
+  public static double MAX_ACCEL = 30;
+  public static double MAX_ANG_VEL = Math.toRadians(142.9);
   public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
   /*

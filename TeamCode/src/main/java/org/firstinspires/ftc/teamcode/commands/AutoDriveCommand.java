@@ -21,6 +21,10 @@ public class AutoDriveCommand extends CommandBase {
     trajectorySequence = trajs.orElse(null);
   }
 
+  public AutoDriveCommand(SampleMecanumDrive drive, TrajectorySequence trajs) {
+    this(drive, Optional.ofNullable(null), Optional.ofNullable(trajs));
+  }
+
   @Override
   public void initialize() {
     if (trajectory != null) {
@@ -28,7 +32,7 @@ public class AutoDriveCommand extends CommandBase {
       drive.followTrajectoryAsync(trajectory);
     } else if (trajectorySequence != null) {
       drive.setPoseEstimate(trajectorySequence.start());
-      drive.followTrajectorySequence(trajectorySequence);
+      drive.followTrajectorySequenceAsync(trajectorySequence);
     } else throw new IllegalArgumentException("No Trajectory or TrajectorySequence provide");
   }
 

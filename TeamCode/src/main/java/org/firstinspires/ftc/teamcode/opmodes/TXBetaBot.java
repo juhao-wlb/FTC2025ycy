@@ -12,7 +12,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.function.Supplier;
-
 import org.firstinspires.ftc.teamcode.commands.AutoAlignCommand;
 import org.firstinspires.ftc.teamcode.commands.TeleopDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Lift;
@@ -56,9 +55,9 @@ public class TXBetaBot extends CommandOpMode {
             () -> gamepadEx1.getButton(GamepadKeys.Button.LEFT_STICK_BUTTON),
             () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)));
 
-    gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
-            new AutoAlignCommand(drive, vision)
-    );
+    gamepadEx1
+        .getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+        .whenPressed(new AutoAlignCommand(drive, vision));
 
     // Basket Up Command
     gamepadEx1
@@ -167,7 +166,7 @@ public class TXBetaBot extends CommandOpMode {
             () ->
                 gamepadEx1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)
                     && lift.getGoal() == Lift.Goal.STOW)
-        .whenPressed(lift.resetCommand());
+        .whenPressed(lift.resetCommand().withTimeout(100));
 
     new FunctionalButton(
             () ->
