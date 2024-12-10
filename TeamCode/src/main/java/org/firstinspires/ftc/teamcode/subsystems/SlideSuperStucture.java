@@ -116,9 +116,9 @@ public class SlideSuperStucture extends SubsystemBase {
 
   public enum Goal {
     STOW(1, 0, 0, 0, 0.5),
-    AIM(slideExtensionVal, 0.4, 0.75, turnAngleDeg, 0.5),
+    AIM(slideExtensionVal, 0.35, 0.75, turnAngleDeg, 0.5),
     GRAB(slideExtensionVal, 0.5, 0.75, turnAngleDeg, 0.18),
-    HANDOFF(0.92, 0.15, 0.05, 0, 0.18);
+    HANDOFF(0.92, 0.26, 0.05, 0, 0.18);
 
     private final double slideExtension;
     private final double slideArmPos;
