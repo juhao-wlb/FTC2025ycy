@@ -45,7 +45,7 @@ public class ServoTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if(servo_encoder_name!=""){
-                telemetry_M.addData("EncoderPosition", 1 - encoder0.getVoltage() / encoder0.getMaxVoltage());
+                telemetry_M.addData("EncoderPosition (Voltage)", encoder0.getVoltage());
                 telemetry_M.addData("AnalogMaxVoltage", encoder0.getMaxVoltage());
             }
 
