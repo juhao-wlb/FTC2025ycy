@@ -20,17 +20,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.subsystems.AlphaClaw;
 import org.firstinspires.ftc.teamcode.subsystems.AlphaLift;
+import org.firstinspires.ftc.teamcode.subsystems.AlphaSlide;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.SampleMecanumDrive;
 
 @Config @TeleOp(name = "ycyAlphaTeleOP")
 public class AlphaCar extends LinearOpMode {
     public static boolean isHeadless = true;
     public static double maxPower = 1;
+    public AlphaSlide slide;
+    public AlphaLift lift;
 //    private Servo clawServo, clawTurnServo, slideServo;
 //    private clawTurnServoState turnState = clawTurnServoState.ORIGIN;
     private SampleMecanumDrive drive;
-    private AlphaClaw claw;
-    private AlphaLift lift;
     private GamepadEx gamepadEx1;
     static{
         headless = new Gamepad.RumbleEffect.Builder().addStep(0.5, 0.1, 250)
@@ -47,7 +48,6 @@ public class AlphaCar extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         double position = 0;
-        claw = new AlphaClaw(hardwareMap);
         lift = new AlphaLift(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
         gamepadEx1 = new GamepadEx(gamepad1);
