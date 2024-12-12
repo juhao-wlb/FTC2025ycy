@@ -37,7 +37,7 @@ public class AlphaClaw extends SubsystemBase {
     public void aim(double slideSetpoint, double yawSetpointRot){
         // TODO: calc setpoint based on joint, to make it linear
         slideServo.setPosition(slideSetpoint*(slideServo_ExtendPose - slideServo_ContractPose)+slideServo_ExtendPose);
-        clawServo.setPosition(clawServo_OpenPose);
+//        clawServo.setPosition(clawServo_OpenPose);
         setYaw(yawSetpointRot);
     }
     public void grab(){

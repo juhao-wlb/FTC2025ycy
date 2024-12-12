@@ -2,10 +2,15 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.lib.Units;
+import org.firstinspires.ftc.teamcode.lib.gobilda.GoBildaPinpointDriver;
+
+import lombok.Getter;
 
 /*
  * Constants shared between multiple drive types.
@@ -20,17 +25,20 @@ import org.firstinspires.ftc.teamcode.lib.Units;
  */
 @Config
 public class DriveConstants {
-    public static final RobotType currentRobot = RobotType.ALPHA;
+    public static final RobotType currentRobot = RobotType.BETA;
 
     public enum RobotType {
         ALPHA,
-        BETA
+        BETA,
+        GAMMA
     }
 
+    @Deprecated
     public static final Pose2d xPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(155),Units.degreesToRadians(0))
             : new Pose2d(Units.mmToInches(0),Units.mmToInches(-100),Units.degreesToRadians(0));
 
+    @Deprecated
     public static final Pose2d yPose = currentRobot == RobotType.ALPHA
             ? new Pose2d(Units.mmToInches(-25),Units.mmToInches(-155),Units.degreesToRadians(90))
             : new Pose2d(Units.mmToInches(40),Units.mmToInches(15),Units.degreesToRadians(90));
@@ -57,7 +65,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 2; // INCH!!
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed, >1 -> 加速 <1 -> 减速
-    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:13.19; // INCH!!
+    public static double TRACK_WIDTH = currentRobot==RobotType.ALPHA?15.44:15.21; // INCH!!
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -65,9 +73,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = currentRobot==RobotType.ALPHA?      0.014  :   1.0 / rpmToVelocity(MAX_RPM);
-    public static double kA = currentRobot==RobotType.ALPHA?      0.0015 :   0;
-    public static double kStatic = currentRobot==RobotType.ALPHA? 0.07   :   0;
+    public static double kV = currentRobot==RobotType.ALPHA?      0.0135 :   0.015;//1.0 / rpmToVelocity(MAX_RPM);
+    public static double kA = currentRobot==RobotType.ALPHA?      0.002  :   0.002;
+    public static double kStatic = currentRobot==RobotType.ALPHA? 0.052  :   0.052;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -76,9 +84,9 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:30;
+    public static double MAX_VEL = currentRobot==RobotType.ALPHA ? 87.53357957701085:63.0295389435408;
     public static double MAX_ACCEL = 30;
-    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:60);
+    public static double MAX_ANG_VEL = Math.toRadians(currentRobot==RobotType.ALPHA?141.57416123663535:142.9192604427183);
     public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
     /*
@@ -88,6 +96,37 @@ public class DriveConstants {
             RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
             RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaXLocalizerDirection;
+    public static GoBildaPinpointDriver.EncoderDirection GoBildaYLocalizerDirection;
+    public static GoBildaPinpointDriver.GoBildaOdometryPods GoBildaLocalizerEncoderResolution;
+    public static Translation2dHelperClass GoBildaLocalizerPerpendicularOffset;
+    public static class Translation2dHelperClass{
+        @Getter
+        public double X, Y;
+        Translation2dHelperClass(double x, double y){
+            this.X = x;
+            this.Y = y;
+        }
+    }
+    static{
+        switch (currentRobot){
+            case ALPHA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(0, 4);
+                break;
+            case BETA:
+                GoBildaXLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+                GoBildaYLocalizerDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+                GoBildaLocalizerEncoderResolution = GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD;
+                GoBildaLocalizerPerpendicularOffset = new Translation2dHelperClass(-92.03742,104.03742);
+                break;
+            default:
+                RobotLog.ee("DriveConstants", "GoBildaPinpointDriver not configured for %s.", currentRobot.toString());
+        }
+    }
 
 
     public static double encoderTicksToInches(double ticks) {

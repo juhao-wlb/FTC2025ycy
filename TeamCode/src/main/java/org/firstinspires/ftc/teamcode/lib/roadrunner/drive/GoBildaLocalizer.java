@@ -22,10 +22,10 @@ import lombok.experimental.ExtensionMethod;
 public class GoBildaLocalizer implements Localizer {
     private final GoBildaPinpointDriver odometry;
 
-    public GoBildaLocalizer(final HardwareMap hardwareMap, final Translation2d mountOffsets) {
+    public GoBildaLocalizer(final HardwareMap hardwareMap, final DriveConstants.Translation2dHelperClass mountOffsets) {
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "od");
-        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        odometry.setEncoderResolution((DriveConstants.currentRobot == DriveConstants.RobotType.ALPHA)?GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD:GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odometry.setEncoderDirections(DriveConstants.GoBildaXLocalizerDirection, DriveConstants.GoBildaYLocalizerDirection);
+        odometry.setEncoderResolution(DriveConstants.GoBildaLocalizerEncoderResolution);
         odometry.setOffsets(mountOffsets.getX(),mountOffsets.getY());
         odometry.resetPosAndIMU();
     }

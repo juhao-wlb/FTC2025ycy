@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-
-import org.firstinspires.ftc.teamcode.subsystems.drivetrain.MecanumDrive;
-
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.MecanumDrive;
 
 public class TeleopDriveCommand extends CommandBase {
     private final MecanumDrive drive;
@@ -13,17 +11,21 @@ public class TeleopDriveCommand extends CommandBase {
     private final DoubleSupplier rotate;
     private final DoubleSupplier fun;
     private final BooleanSupplier shouldReset;
+    private final BooleanSupplier shouldSlow;
 
-    public TeleopDriveCommand(MecanumDrive drive,
-                              DoubleSupplier forward,
-                              DoubleSupplier fun,
-                              DoubleSupplier rotate,
-                              BooleanSupplier shouldReset) {
+    public TeleopDriveCommand(
+            MecanumDrive drive,
+            DoubleSupplier forward,
+            DoubleSupplier fun,
+            DoubleSupplier rotate,
+            BooleanSupplier shouldReset,
+            BooleanSupplier shouldSlow) {
         this.drive = drive;
         this.forward = forward;
         this.rotate = rotate;
         this.fun = fun;
         this.shouldReset = shouldReset;
+        this.shouldSlow = shouldSlow;
 
         addRequirements(drive);
     }
@@ -33,7 +35,16 @@ public class TeleopDriveCommand extends CommandBase {
         if (shouldReset.getAsBoolean()) {
             drive.reset();
         }
-        drive.moveRobot(forward.getAsDouble(), fun.getAsDouble(), rotate.getAsDouble());
-    }
 
+        double forwardValue = forward.getAsDouble();
+        double funValue = fun.getAsDouble();
+        double rotateValue = rotate.getAsDouble();
+
+        if (shouldSlow.getAsBoolean()) {
+            forwardValue *= 0.3;
+            funValue *= 0.3;
+            rotateValue *= 0.3;
+        }
+        drive.moveRobotFieldRelatice(forwardValue, funValue, rotateValue);
+    }
 }
