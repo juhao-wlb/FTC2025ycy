@@ -5,64 +5,74 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class AlphaLiftClaw extends SubsystemBase {
-    private final Servo liftArmServo;
-    private final Servo liftClawServo;
-    private final Servo liftWristServo;
-    private boolean isClawOpen;
+  private final Servo liftArmServo;
+  private final Servo liftClawServo;
+  private final Servo liftWristServo;
+  private boolean isClawOpen;
 
-    public AlphaLiftClaw(final HardwareMap hardwareMap) {
-        liftArmServo = hardwareMap.get(Servo.class, "liftArmServo"); // 0.3 Up 0.7 Down
-        liftClawServo = hardwareMap.get(Servo.class, "clawServo"); // 0 Close 0.5 Open
-        liftWristServo = hardwareMap.get(Servo.class, "liftWristServo");
+  public AlphaLiftClaw(final HardwareMap hardwareMap) {
+    liftArmServo = hardwareMap.get(Servo.class, "liftArmServo"); // 0.3 Up 0.7 Down
+    liftClawServo = hardwareMap.get(Servo.class, "clawServo"); // 0 Close 0.5 Open
+    liftWristServo = hardwareMap.get(Servo.class, "liftWristServo");
+  }
+
+  public void grabWrist() {
+    liftWristServo.setPosition();
+  } // TODO:fill
+
+  public void basketWrist() {
+    liftWristServo.setPosition();
+  } // TODO:fill
+
+  public void chamberWrist() {
+    liftWristServo.setPosition();
+  } // TODO:fill
+
+  public void switchLiftClaw() {
+    if (isClawOpen) {
+      openClaw();
+    } else {
+      closeClaw();
     }
+    isClawOpen = !isClawOpen;
+  }
 
-    public void grabWrist() { liftWristServo.setPosition();}//TODO:fill
+  public void openClaw() {
+    liftClawServo.setPosition(0.5);
+  }
 
-    public void basketWrist() { liftWristServo.setPosition();}//TODO:fill
+  public void closeClaw() {
+    liftClawServo.setPosition(0.25);
+  }
 
-    public void chamberWrist() { liftWristServo.setPosition();}//TODO:fill
+  public void upLiftArm() {
+    liftArmServo.setPosition(0.725);
+  }
 
-    public void switchLiftClaw() {
-        if (isClawOpen) {
-            openClaw();
-        } else {
-            closeClaw();
-        }
-        isClawOpen = !isClawOpen;
+  public void foldLiftArm() {
+    liftArmServo.setPosition(0.15);
+  }
+
+  public void chamberLiftArm() {
+    liftArmServo.setPosition();
+  }
+
+  public enum ServoPositions {
+    STOW(0, 0, 0),
+    CHAMBER(0, 0, 0),
+    BASKET(0, 0, 0),
+    GRAB(0, 0, 0);
+
+    private double liftArmPosition;
+    private double liftWristPosition;
+    private double liftClawPosition;
+
+    ServoPositions(double liftArmPosition, double liftClawPosition, double liftWristPosition) {
+      this.liftArmPosition = liftArmPosition;
+      this.liftClawPosition = liftArmPosition;
+      this.liftWristPosition = liftWristPosition;
     }
-
-    public void openClaw() {
-        liftClawServo.setPosition(0.5);
-    }
-
-    public void closeClaw() {
-        liftClawServo.setPosition(0.25);
-    }
-
-    public void upLiftArm() {
-        liftArmServo.setPosition(0.725);
-    }
-
-    public void foldLiftArm() {
-        liftArmServo.setPosition(0.15);
-    }
-
-    public enum ServoPositions {
-        STOW(0,0,0),
-        CHAMBER(0,0,0),
-        BASKET(0,0,0),
-        GRAB(0,0,0);
-
-        private double liftArmPosition;
-        private double liftWristPosition;
-        private double liftClawPosition;
-
-        ServoPositions(double liftArmPosition, double liftClawPosition, double liftWristPosition) {
-            this.liftArmPosition = liftArmPosition;
-            this.liftClawPosition = liftArmPosition;
-            this.liftWristPosition = liftWristPosition;
-        }
-    }
+  }
 }
 
 /*package org.firstinspires.ftc.teamcode.subsystems;
