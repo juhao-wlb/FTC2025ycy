@@ -16,7 +16,7 @@ public class AlphaSlide extends SubsystemBase {
   private final Servo intakeClawServo, wristServo, wristTurnServo;
   private final Servo slideArmServo, slideRightServo;
   private boolean hasGamepiece = false;
-  private static double slideExtensionVal = 0.73;
+  private static double slideExtensionVal = 0.7;
 
   private static double turnAngleDeg = 0;
   private TurnServo turnServo = TurnServo.DEG_0;
@@ -87,12 +87,12 @@ public class AlphaSlide extends SubsystemBase {
   }
 
   public void openIntakeClaw() {
-    intakeClawServo.setPosition(0.7);
+    intakeClawServo.setPosition(0.5);
     isIntakeClawOpen = true;
   }
 
   public void closeIntakeClaw() {
-    intakeClawServo.setPosition(0);
+    intakeClawServo.setPosition(0.23);
     isIntakeClawOpen = false;
   }
 
@@ -106,19 +106,19 @@ public class AlphaSlide extends SubsystemBase {
 
   public void slideArmDown() {
     // This is down for stowing the liftArm when scoring the speciemen
-    slideArmServo.setPosition(0.85);
+    slideArmServo.setPosition(0.38);
   }
 
   public void slideArmUp() {
     // This is up for the auto
-    slideArmServo.setPosition(0.8);
+    slideArmServo.setPosition(0.6);
   }
 
   public enum Goal {
-    STOW(1, 0, 0, 0, 0.66),
-    AIM(slideExtensionVal, 0.35, 0.75, turnAngleDeg, 0.66),
-    GRAB(slideExtensionVal, 0.5, 0.75, turnAngleDeg, 0.4),
-    HANDOFF(0.17, 0.26, 0.05, 0, 0.4);
+    STOW(1, 0.6, 0, 0.1, 0.5),
+    AIM(slideExtensionVal, 0.38, 0.78, turnAngleDeg, 0.5),
+    GRAB(slideExtensionVal, 0.3, 0.78, turnAngleDeg, 0.23),
+    HANDOFF(0.17, 0.6, 0.35, 0.1, 0.23);
 
     private final double slideExtension;
     private final double slideArmPos;
@@ -152,15 +152,15 @@ public class AlphaSlide extends SubsystemBase {
     switch (turnServo) {
       case DEG_0:
         turnAngleDeg = 0.5;
-        turnServo = TurnServo.DEG_05;
+        turnServo = TurnServo.DEG_0;
         break;
-      case DEG_05:
+      case DEG_45:
         turnAngleDeg = 0.8;
-        turnServo = TurnServo.DEG_08;
+        turnServo = TurnServo.DEG_0;
         break;
-      case DEG_08:
+      case DEG_90:
         turnAngleDeg = 0.8;
-        turnServo = TurnServo.DEG_08;
+        turnServo = TurnServo.DEG_45;
         break;
     }
   }
@@ -169,23 +169,30 @@ public class AlphaSlide extends SubsystemBase {
     switch (turnServo) {
       case DEG_0:
         turnAngleDeg = 0;
-        turnServo = TurnServo.DEG_0;
+        turnServo = TurnServo.DEG_45;
         break;
-      case DEG_05:
+      case DEG_45:
         turnAngleDeg = 0;
-        turnServo = TurnServo.DEG_0;
+        turnServo = TurnServo.DEG_90;
         break;
-      case DEG_08:
+      case DEG_90:
         turnAngleDeg = 0.5;
-        turnServo = TurnServo.DEG_05;
+        turnServo = TurnServo.DEG_90;
         break;
     }
   }
 
   enum TurnServo {
-    DEG_0,
-    DEG_05,
-    DEG_08
+    DEG_0(0.4),
+    DEG_45(0.55),
+    DEG_90(0.7);
+
+
+    private double turnPosition;
+
+    TurnServo(double turnPosition){
+      this.turnPosition = turnPosition;
+    }
   }
 
   @Override

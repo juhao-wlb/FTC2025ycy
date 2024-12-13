@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.utils.MathUtils;
 
 public class AlphaLift extends SubsystemBase {
-  private final double kP = 0.02, kI = 0.0, kD = 0.0, kG = 0.0;
+  private final double kP = 0.005, kI = 0.0, kD = 0.0, kG = 0.0;
   private final PIDController pidController;
   private final DcMotorEx liftMotor;
   private double setpointTicks = 0.0;
@@ -36,7 +36,7 @@ public class AlphaLift extends SubsystemBase {
   }
 
   public void runSetpoint(double ticks) {
-    setpointTicks = Range.clip(ticks, 0.0, 1500.0);
+    setpointTicks = Range.clip(ticks, 0.0, 1550.0);
   }
 
   public void runLiftOpen(double percent) {
@@ -103,11 +103,11 @@ public class AlphaLift extends SubsystemBase {
   }
 
   public enum Goal {
-    BASKET(1500.0),
+    BASKET(1550.0),
     STOW(0.0),
-    PRE_HANG(300.0),
-    HANG(0),
-    GRAB(),
+    PRE_HANG(700.0),
+    HANG(1100.0),
+    GRAB(0.0),
     OPEN_LOOP(0.0);
 
     private final double setpointTicks;
