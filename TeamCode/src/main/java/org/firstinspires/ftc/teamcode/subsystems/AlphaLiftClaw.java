@@ -53,6 +53,10 @@ public class AlphaLiftClaw extends SubsystemBase {
     liftArmServo.setPosition(0.15);
   }
 
+  public void grabLiftArm() {
+    liftArmServo.setPosition();
+  }
+
   public void chamberLiftArm() {
     liftArmServo.setPosition();
   }
