@@ -12,20 +12,20 @@ public class AlphaLiftClaw extends SubsystemBase {
 
   public AlphaLiftClaw(final HardwareMap hardwareMap) {
     liftArmServo = hardwareMap.get(Servo.class, "liftArmServo"); // 0.3 Up 0.7 Down
-    liftClawServo = hardwareMap.get(Servo.class, "clawServo"); // 0 Close 0.5 Open
+    liftClawServo = hardwareMap.get(Servo.class, "liftClawServo"); // 0 Close 0.5 Open
     liftWristServo = hardwareMap.get(Servo.class, "liftWristServo");
   }
 
   public void grabWrist() {
-    liftWristServo.setPosition();
+    liftWristServo.setPosition(0.43);
   } // TODO:fill
 
   public void basketWrist() {
-    liftWristServo.setPosition();
+    liftWristServo.setPosition(0.7);
   } // TODO:fill
 
   public void chamberWrist() {
-    liftWristServo.setPosition();
+    liftWristServo.setPosition(0.58);
   } // TODO:fill
 
   public void switchLiftClaw() {
@@ -42,30 +42,30 @@ public class AlphaLiftClaw extends SubsystemBase {
   }
 
   public void closeClaw() {
-    liftClawServo.setPosition(0.25);
+    liftClawServo.setPosition(0.28);
   }
 
   public void upLiftArm() {
-    liftArmServo.setPosition(0.725);
+    liftArmServo.setPosition(0.47);
   }
 
   public void foldLiftArm() {
-    liftArmServo.setPosition(0.15);
+    liftArmServo.setPosition(0.85);
   }
 
   public void grabLiftArm() {
-    liftArmServo.setPosition();
+    liftArmServo.setPosition(0.17);
   }
 
   public void chamberLiftArm() {
-    liftArmServo.setPosition();
+    liftArmServo.setPosition(0.72);
   }
 
   public enum ServoPositions {
-    STOW(0, 0, 0),
-    CHAMBER(0, 0, 0),
-    BASKET(0, 0, 0),
-    GRAB(0, 0, 0);
+    STOW(0.85, 0.28, 0),
+    CHAMBER(0.72, 0.28, 0),
+    BASKET(0.47, 0.28, 0),
+    GRAB(0.17, 0.5, 0);
 
     private double liftArmPosition;
     private double liftWristPosition;

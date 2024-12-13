@@ -122,7 +122,7 @@ public class AlphaCar extends CommandOpMode {
     // Chamber Command from Grab
     new FunctionalButton(
             () ->
-                gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+                gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
                     && lift.getGoal() == AlphaLift.Goal.GRAB)
         .whenPressed(
             new SequentialCommandGroup(new InstantCommand(() -> lift.setGoal(AlphaLift.Goal.PRE_HANG))
@@ -133,7 +133,7 @@ public class AlphaCar extends CommandOpMode {
 
     new FunctionalButton(
             () ->
-                gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+                gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
                     && lift.getGoal() == AlphaLift.Goal.STOW)
         .whenPressed(
                 new InstantCommand(() -> lift.setGoal(AlphaLift.Goal.GRAB))
@@ -143,7 +143,7 @@ public class AlphaCar extends CommandOpMode {
         );
 
     new FunctionalButton(
-            () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
+            () -> gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
                     && lift.getGoal() == AlphaLift.Goal.HANG)
         .whenPressed(
             new InstantCommand(() -> liftClaw.openClaw())
@@ -154,14 +154,14 @@ public class AlphaCar extends CommandOpMode {
 
     new FunctionalButton(
             () ->
-                    gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
+                    gamepadEx1.getButton(GamepadKeys.Button.DPAD_UP)
                             && lift.getGoal() == AlphaLift.Goal.PRE_HANG)
             .whenPressed(new InstantCommand(() -> lift.setGoal(AlphaLift.Goal.HANG))
             );
 
     new FunctionalButton(
             () ->
-                    gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
+                    gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
                             && lift.getGoal() == AlphaLift.Goal.HANG)
             .whenPressed(new InstantCommand(() -> lift.setGoal(AlphaLift.Goal.PRE_HANG))
             );
@@ -170,14 +170,7 @@ public class AlphaCar extends CommandOpMode {
             () ->
                     gamepadEx1.getButton(GamepadKeys.Button.DPAD_DOWN)
                             && lift.getGoal() == AlphaLift.Goal.GRAB)
-            .whenPressed(new InstantCommand(() -> liftClaw.closeClaw())
-            );
-
-    new FunctionalButton(
-            () ->
-                    gamepadEx1.getButton(GamepadKeys.Button.DPAD_LEFT)
-                            && lift.getGoal() == AlphaLift.Goal.GRAB)
-            .whenPressed(new InstantCommand(() -> liftClaw.openClaw())
+            .whenPressed(new InstantCommand(() -> liftClaw.switchLiftClaw())
             );
 
     //        // Handoff from Aim
